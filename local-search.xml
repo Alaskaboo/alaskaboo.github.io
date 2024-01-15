@@ -56,7 +56,7 @@
   
   
   <entry>
-    <title>量化校园开发配置文件</title>
+    <title>量化校园配置文件</title>
     <link href="/2022/10/05/campus%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/"/>
     <url>/2022/10/05/campus%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/</url>
     
@@ -75,6 +75,60 @@
       <tag>比赛</tag>
       
       <tag>校园项目</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Dubbo</title>
+    <link href="/2022/07/22/Dubbo/"/>
+    <url>/2022/07/22/Dubbo/</url>
+    
+    <content type="html"><![CDATA[<h1 id="Dubbo博客链接"><a href="#Dubbo博客链接" class="headerlink" title="Dubbo博客链接"></a>Dubbo博客链接</h1><p><a href="https://www.cnblogs.com/Alaskaboo/p/16651731.html">Dubbo学习 - Alaskaboo - 博客园 (cnblogs.com)</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>后端技术</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>技术学习</tag>
+      
+      <tag>校园</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>CSS</title>
+    <link href="/2022/05/24/CSS/"/>
+    <url>/2022/05/24/CSS/</url>
+    
+    <content type="html"><![CDATA[<p><a href="https://www.cnblogs.com/Alaskaboo/p/16305103.html">CSS - Alaskaboo - 博客园 (cnblogs.com)</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>前端技术</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>技术学习</tag>
+      
+      <tag>校园</tag>
       
     </tags>
     
