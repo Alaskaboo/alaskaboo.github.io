@@ -4,33 +4,6 @@
   
   
   <entry>
-    <title>深眸慧扫项目</title>
-    <link href="/2025/06/25/%E6%B0%B4%E4%B8%8B%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%80%9D%E8%B7%AF/"/>
-    <url>/2025/06/25/%E6%B0%B4%E4%B8%8B%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%80%9D%E8%B7%AF/</url>
-    
-    <content type="html"><![CDATA[<p>水下机器人思路</p><p>规格：15寸左右大小</p><p>定位：小型垃圾打捞</p><p>功能：</p><ul><li>前期主要是线缆连接控制、后期看能否进行遥控设置，分为<strong>AI打捞</strong>和<strong>人工操作打捞</strong></li><li>可视化平台设计</li></ul><p>辅助功能：后期进行初略对水质的检测、和检测地方的3D还原（适用于打捞，考古）</p>]]></content>
-    
-    
-    <categories>
-      
-      <category>比赛</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>学生项目</tag>
-      
-      <tag>比赛</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>Java数据结构</title>
     <link href="/2025/06/25/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"/>
     <url>/2025/06/25/Java%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</url>
@@ -50,6 +23,33 @@
       <tag>数据结构</tag>
       
       <tag>java</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>深眸慧扫项目</title>
+    <link href="/2025/06/25/%E6%B0%B4%E4%B8%8B%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%80%9D%E8%B7%AF/"/>
+    <url>/2025/06/25/%E6%B0%B4%E4%B8%8B%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%80%9D%E8%B7%AF/</url>
+    
+    <content type="html"><![CDATA[<p>水下机器人思路</p><p>规格：15寸左右大小</p><p>定位：小型垃圾打捞</p><p>功能：</p><ul><li>前期主要是线缆连接控制、后期看能否进行遥控设置，分为<strong>AI打捞</strong>和<strong>人工操作打捞</strong></li><li>可视化平台设计</li></ul><p>辅助功能：后期进行初略对水质的检测、和检测地方的3D还原（适用于打捞，考古）</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>比赛</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>学生项目</tag>
+      
+      <tag>比赛</tag>
       
     </tags>
     
@@ -101,7 +101,9 @@
       
       <tag>学生项目</tag>
       
-      <tag>比赛，计算机视觉</tag>
+      <tag>比赛</tag>
+      
+      <tag>计算机视觉</tag>
       
     </tags>
     
