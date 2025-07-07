@@ -1,0 +1,936 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alaskaboo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="微服务是一种软件架构风格，它是以专注于单一职责的很多小型项目为基础，组合出复杂的大型应用。 一、Mybatis-Plus1 常见注解MybatisPlus是如何获取实现CRUD的数据库表信息的?  默认以类名驼峰转下划线作为表名 默认把名为id的字段作为主键 默认把变量名驼峰转下划线作为表的字段名  MybatisPlus中比较常用的几个注解如下:  @TableName：用来指定表名 @Tabl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpringCould">
+<meta property="og:url" content="http://example.com/2025/02/28/SpringCloud/index.html">
+<meta property="og:site_name" content="Alaskaboo&#39;s Blog">
+<meta property="og:description" content="微服务是一种软件架构风格，它是以专注于单一职责的很多小型项目为基础，组合出复杂的大型应用。 一、Mybatis-Plus1 常见注解MybatisPlus是如何获取实现CRUD的数据库表信息的?  默认以类名驼峰转下划线作为表名 默认把名为id的字段作为主键 默认把变量名驼峰转下划线作为表的字段名  MybatisPlus中比较常用的几个注解如下:  @TableName：用来指定表名 @Tabl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625172929277.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625172957009.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173002434.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173007633.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173011712.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173015207.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173018571.png">
+<meta property="article:published_time" content="2025-02-28T01:32:22.000Z">
+<meta property="article:modified_time" content="2025-06-28T02:18:02.429Z">
+<meta property="article:author" content="Alaskaboo">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625172929277.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SpringCould - Alaskaboo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alaskaboo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SpringCould"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-28 09:32" pubdate>
+          2025年2月28日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SpringCould</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>微服务是一种软件架构风格，它是以专注于单一职责的很多小型项目为基础，组合出复杂的大型应用。</p>
+<h1 id="一、Mybatis-Plus"><a href="#一、Mybatis-Plus" class="headerlink" title="一、Mybatis-Plus"></a>一、Mybatis-Plus</h1><h2 id="1-常见注解"><a href="#1-常见注解" class="headerlink" title="1 常见注解"></a>1 常见注解</h2><p><strong>MybatisPlus是如何获取实现CRUD的数据库表信息的?</strong></p>
+<ul>
+<li>默认以类名驼峰转下划线作为表名</li>
+<li>默认把名为id的字段作为主键</li>
+<li>默认把变量名驼峰转下划线作为表的字段名</li>
+</ul>
+<p><strong>MybatisPlus中比较常用的几个注解如下:</strong></p>
+<ul>
+<li>@TableName：用来指定表名</li>
+<li>@Tableld：用来指定表中的主键字段信息</li>
+<li>@TableField：用来指定表中的普通字段信息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@TableName(&quot;tb_user&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span>&#123;<br>    <span class="hljs-meta">@TableId(value=&quot;id&quot;,type= IdType.AUTO)</span><br>    <span class="hljs-keyword">private</span> Long id;<br>    <br>    <span class="hljs-meta">@TableField(&quot;username&quot;)</span><br>    <span class="hljs-keyword">private</span> String name;<br>    <br>    <span class="hljs-meta">@TableField(&quot;is_married&quot;)</span><br>    <span class="hljs-keyword">private</span> Boolean isMarried;<br>    <br>    <span class="hljs-meta">@TableField(&quot; order&#x27;&quot;)</span><br>    <span class="hljs-keyword">private</span> Integer order;<br>    <br>    <span class="hljs-meta">@TableField(exist=false)</span><br>    <span class="hljs-keyword">private</span> String address;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><strong>IdType枚举：</strong></p>
+<ul>
+<li>AUTO：数据库自增长</li>
+<li>INPUT：通过set方法自行输入</li>
+<li>ASSIGN ID：分配lD，接口ldentifierGenerator的方法nextld来生成id</li>
+<li>默认实现类为DefaultldentifierGenerator雪花算法</li>
+</ul>
+<p><strong>使用@TableField的常见场景：</strong></p>
+<ul>
+<li>成员变量名与数据库字段名不一致</li>
+<li>成员变量名以is开头，且是布尔值</li>
+<li>成员变量名与数据库关键字冲突</li>
+<li>成员变量不是数据库字段</li>
+</ul>
+<h2 id="2-常见配置"><a href="#2-常见配置" class="headerlink" title="2 常见配置"></a>2 常见配置</h2><p>MyBatisPlus的配置项继承了MyBatis原生配置和一些自己特有的配置。例如:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">mybatis-plus:</span><br>    <span class="hljs-attr">type-aliases-package:</span> <span class="hljs-string">com.itheima.mp.domain.po</span>   <span class="hljs-comment"># 别名扫描包</span><br>    <span class="hljs-attr">mapper-locations:</span> <span class="hljs-string">&quot;classpath*:/mapper/**/*.xml&quot;</span>  <span class="hljs-comment"># Mapper.xml文件地址，默认值</span><br>    <span class="hljs-attr">configuration:</span><br>      <span class="hljs-attr">map-underscore-to-camel-case:</span> <span class="hljs-literal">true</span>             <span class="hljs-comment"># 是否开启下划线和驼峰的映射</span><br>      <span class="hljs-attr">cache-enabled:</span> <span class="hljs-literal">false</span>                           <span class="hljs-comment"># 是否开启二级缓存</span><br>    <span class="hljs-attr">global-config:</span><br>      <span class="hljs-attr">db-config:</span><br>        <span class="hljs-attr">id-type:</span> <span class="hljs-string">assign_id</span>                           <span class="hljs-comment"># id为雪花算法生成</span><br>        <span class="hljs-attr">update-strategy:</span> <span class="hljs-string">not_null</span>                    <span class="hljs-comment"># 更新策略:只更新非空字段</span><br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="3-条件构造器"><a href="#3-条件构造器" class="headerlink" title="3 条件构造器"></a>3 条件构造器</h2><p>条件构造器的用法：</p>
+<ul>
+<li>QueryWrapper和LambdaQueryWrapper通常用来构建select、delete、update的where条件部分</li>
+<li>UpdateWrapper和LambdaUpdateWrapper通常只有在set语句比较特殊才使用</li>
+<li>尽量使用LambdaQueryWrapper和LambdaUpdateWrapper避免硬编码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testQueryWrapper</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 1.构建查询条件</span><br>    QueryWrapper&lt;User&gt; wrapper = <span class="hljs-keyword">new</span> <span class="hljs-title class_">QueryWrapper</span>&lt;User&gt;()<br>            .select(<span class="hljs-string">&quot;id&quot;</span>, <span class="hljs-string">&quot;username&quot;</span>, <span class="hljs-string">&quot;balance&quot;</span>, <span class="hljs-string">&quot;info&quot;</span>)<br>            .like(<span class="hljs-string">&quot;username&quot;</span>, <span class="hljs-string">&quot;o&quot;</span>)<br>            .ge(<span class="hljs-string">&quot;balance&quot;</span>, <span class="hljs-number">1000</span>);<br>    <span class="hljs-comment">// 2.查询</span><br>    List&lt;User&gt; users = userMapper.selectList(wrapper);<br>    users.forEach(System.out::println);<br>&#125;<br><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testLambdaQueryWrapper</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 1.构建查询条件</span><br>    LambdaQueryWrapper&lt;User&gt; wrapper = <span class="hljs-keyword">new</span> <span class="hljs-title class_">LambdaQueryWrapper</span>&lt;User&gt;()<br>            .select(User::getId, User::getUsername, User::getBalance, User::getInfo)<br>            .like(User::getUsername, <span class="hljs-string">&quot;o&quot;</span>)<br>            .ge(User::getBalance, <span class="hljs-number">1000</span>);<br>    <span class="hljs-comment">// 2.查询</span><br>    List&lt;User&gt; users = userMapper.selectList(wrapper);<br>    users.forEach(System.out::println);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="4-自定义SQL"><a href="#4-自定义SQL" class="headerlink" title="4 自定义SQL"></a>4 自定义SQL</h2><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625172929277.png" srcset="/img/loading.gif" lazyload alt="image-20250425181952713" style="zoom: 67%;" />
+
+
+
+<p>第③也可用注解的方式合并到第二个</p>
+<h2 id="5-批量新增"><a href="#5-批量新增" class="headerlink" title="5 批量新增"></a>5 批量新增</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> User <span class="hljs-title function_">buidUser</span><span class="hljs-params">(<span class="hljs-type">int</span> i)</span> &#123;<br>    <span class="hljs-keyword">return</span> User.builder()<br>        .username(<span class="hljs-string">&quot;user_&quot;</span> + i)<br>        .password(<span class="hljs-string">&quot;6666&quot;</span>)<br>        .phone(<span class="hljs-string">&quot;&quot;</span> + (<span class="hljs-number">18688990011L</span> + i))<br>        .balance(<span class="hljs-number">1680</span>)<br>        .info(<span class="hljs-string">&quot;&#123;\&quot;age\&quot;: 24, \&quot;intro\&quot;: \&quot;英文老师\&quot;, \&quot;gender\&quot;: \&quot;male\&quot;&#125;&quot;</span>)<br>        .createTime(LocalDateTime.now())<br>        .updateTime(LocalDateTime.now()).build();<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p><strong>需求：批量插入10万条用户数据，并作出对比</strong></p>
+</blockquote>
+<ul>
+<li>普通for循环插入，<strong>速度极差，不推荐。</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testSaveOneByOne</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">begin</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1e5</span>; i++) &#123;<br>        userService.save(buidUser(i));<br>    &#125;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>    System.out.println(<span class="hljs-string">&quot;耗时：&quot;</span> + (end - begin) + <span class="hljs-string">&quot;ms&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625172957009.png" srcset="/img/loading.gif" lazyload alt="image-20250426105950580" style="zoom:67%;" />
+
+<ul>
+<li>IService的批量插入，MP的批量新增，基于预编译的批处理，性能不错。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testSaveBatch</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-comment">// 我们每次批量插入1000条数据，插入100次即10万条数据</span><br>    ArrayList&lt;User&gt; userList = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;(<span class="hljs-number">1000</span>);<br>    <span class="hljs-type">long</span> <span class="hljs-variable">begin</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1e5</span>; i++) &#123;<br>        userList.add(buidUser(i));<br>        <span class="hljs-keyword">if</span> (i % <span class="hljs-number">1000</span> == <span class="hljs-number">0</span>) &#123;<br>            userService.saveBatch(userList);<br>            userList.clear();<br>        &#125;<br>    &#125;<br>    <span class="hljs-type">long</span> <span class="hljs-variable">end</span> <span class="hljs-operator">=</span> System.currentTimeMillis();<br>    System.out.println(<span class="hljs-string">&quot;耗时：&quot;</span> + (end - begin) + <span class="hljs-string">&quot;ms&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173002434.png" srcset="/img/loading.gif" lazyload alt="image-20250426110811587" style="zoom:67%;" />
+
+<ul>
+<li>开启rewriteBatchedStatements&#x3D;true参数，配置jdbc参数，性能最好</li>
+</ul>
+<img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173007633.png" srcset="/img/loading.gif" lazyload alt="image-20250426111008718" style="zoom:67%;" />
+
+
+
+<h2 id="6-扩展功能"><a href="#6-扩展功能" class="headerlink" title="6 扩展功能"></a>6 扩展功能</h2><h3 id="6-1-DB静态工具"><a href="#6-1-DB静态工具" class="headerlink" title="6.1 DB静态工具"></a>6.1 DB静态工具</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">public</span> List&lt;UserVO&gt; <span class="hljs-title function_">queryUserAndAddressByIds</span><span class="hljs-params">(List&lt;Long&gt; ids)</span> &#123;<br>    <span class="hljs-comment">//1. 查询用户，且过滤掉冻结用户</span><br>    List&lt;User&gt; users = listByIds(ids).stream().filter(user -&gt; user.getStatus() != <span class="hljs-number">2</span>).collect(Collectors.toList());<br>    <span class="hljs-keyword">if</span> (CollUtil.isEmpty(users)) &#123;<br>        <span class="hljs-keyword">return</span> Collections.emptyList();<br>    &#125;<br>    <span class="hljs-comment">//2. 查询地址</span><br>    <span class="hljs-comment">//2.1 获取用户id集合</span><br>    List&lt;Long&gt; userIds = users.stream().map(User::getId).collect(Collectors.toList());<br><br>    <span class="hljs-comment">//2.2 根据用户id查询地址</span><br>    List&lt;Address&gt; addresses = Db.lambdaQuery(Address.class).in(Address::getUserId, userIds).list();<br>    <span class="hljs-comment">//2.3 地址封装到AddressVO中</span><br>    List&lt;AddressVO&gt; addressVOList = BeanUtil.copyToList(addresses, AddressVO.class);<br>    <span class="hljs-comment">//2.4 将地址按用户id分组</span><br>    Map&lt;Long, List&lt;AddressVO&gt;&gt; addressMap = <span class="hljs-keyword">new</span> <span class="hljs-title class_">HashMap</span>&lt;&gt;(<span class="hljs-number">0</span>);<br>    <span class="hljs-keyword">if</span> (CollUtil.isNotEmpty(addressVOList)) &#123;<br>        addressMap = addressVOList.stream().collect(Collectors.groupingBy(AddressVO::getUserId));<br>    &#125;<br>    <span class="hljs-comment">//3. 将用户封装到UserVO中</span><br>    List&lt;UserVO&gt; list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;(users.size());<br>    <span class="hljs-keyword">for</span> (User user : users) &#123;<br>        <span class="hljs-type">UserVO</span> <span class="hljs-variable">vo</span> <span class="hljs-operator">=</span> BeanUtil.copyProperties(user, UserVO.class);<br>        list.add(vo);<br>        vo.setAddresses(addressMap.get(user.getId()));<br>    &#125;<br>    <span class="hljs-keyword">return</span> list;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="6-2-枚举转换"><a href="#6-2-枚举转换" class="headerlink" title="6.2 枚举转换"></a>6.2 枚举转换</h3><p>如何实现PO类中的枚举类型变量与数据库字段的转换?</p>
+<p>①给枚举中的与数据库对应value值添加@EnumValue注解</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@EnumValue</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> value;<br><span class="hljs-meta">@JsonValue</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> String desc;<br></code></pre></td></tr></table></figure>
+
+<p>②在配置文件中配置统一的枚举处理器，实现类型转换</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">mybatis-plus:</span><br>  <span class="hljs-attr">configuration:</span><br>    <span class="hljs-attr">default-enum-type-handler:</span> <span class="hljs-string">com.baomidou.mybatisplus.core.handlers.MybatisEnumTypeHandler</span> <span class="hljs-comment"># 枚举返回类</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>记住实体类也需要更改</p>
+<img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173011712.png" srcset="/img/loading.gif" lazyload alt="image-20250426201741934" style="zoom:80%;" />
+
+
+
+<h3 id="6-3-JSON转换"><a href="#6-3-JSON转换" class="headerlink" title="6.3 JSON转换"></a>6.3 JSON转换</h3><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173015207.png" srcset="/img/loading.gif" lazyload alt="image-20250426203732831"></p>
+<blockquote>
+<p>首先进行实体类的创建</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.itheima.mp.domain.po;<br><br><span class="hljs-keyword">import</span> io.swagger.annotations.ApiModelProperty;<br><span class="hljs-keyword">import</span> lombok.AllArgsConstructor;<br><span class="hljs-keyword">import</span> lombok.Builder;<br><span class="hljs-keyword">import</span> lombok.Data;<br><span class="hljs-keyword">import</span> lombok.NoArgsConstructor;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Title</span>: userInfo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Author</span>: Alaskaboo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Package</span>: mp-demo</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@Date</span>: 2025/4/26 20:27</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@description</span>: TODO</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Data</span><br><span class="hljs-meta">@Builder</span><br><span class="hljs-meta">@AllArgsConstructor(staticName = &quot;of&quot;)</span><br><span class="hljs-meta">@NoArgsConstructor</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserInfo</span> &#123;<br><br>    <span class="hljs-meta">@ApiModelProperty(&quot;年龄&quot;)</span><br>    <span class="hljs-keyword">private</span> Integer age;<br><br>    <span class="hljs-meta">@ApiModelProperty(&quot;介绍&quot;)</span><br>    <span class="hljs-keyword">private</span> String intro;<br><br>    <span class="hljs-meta">@ApiModelProperty(&quot;性别&quot;)</span><br>    <span class="hljs-keyword">private</span> String gender;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>然后将实体类和VO类中的info进行更改为UserInfo类型，同时添加注解：@TableField(typeHandler &#x3D; JacksonTypeHandler.class)，</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment">  * 详细信息</span><br><span class="hljs-comment">  */</span><br><span class="hljs-meta">@TableField(typeHandler = JacksonTypeHandler.class)</span><br><span class="hljs-keyword">private</span> UserInfo info;<br></code></pre></td></tr></table></figure>
+
+
+
+<blockquote>
+<p>最后进行User实体类上面的@TableName(value &#x3D; “tb_user”, autoResultMap &#x3D; true)，开始autoResultMap自动映射</p>
+</blockquote>
+<h3 id="6-4-插件功能"><a href="#6-4-插件功能" class="headerlink" title="6.4 插件功能"></a>6.4 插件功能</h3><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625173018571.png" srcset="/img/loading.gif" lazyload alt="image-20250426204401361" style="zoom:67%;" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" class="category-chain-item">微服务</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" class="print-no-link">#微服务</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SpringCould</div>
+      <div>http://example.com/2025/02/28/SpringCloud/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alaskaboo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2025年2月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2025年6月28日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/03/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="Machine Learning">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Machine Learning</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/06/25/python%E5%AD%A6%E4%B9%A0/" title="python语法">
+                        <span class="hidden-mobile">python语法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://www.cnblogs.com/Alaskaboo" target="_blank" rel="nofollow noopener"><span>Alaskaboo</span></a> <i class="iconfont icon-love"></i> <a href="" target="_blank" rel="nofollow noopener"><span>以玖</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      渝ICP备2022011653号-1
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=2022011653号-1"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>渝ICP备2022011653号-1</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
