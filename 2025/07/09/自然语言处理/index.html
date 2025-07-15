@@ -19,25 +19,27 @@
   <meta name="author" content="Alaskaboo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="水下机器人思路 规格：15寸左右大小 定位：小型垃圾打捞 功能：  前期主要是线缆连接控制、后期看能否进行遥控设置，分为AI打捞和人工操作打捞 可视化平台设计  辅助功能：后期进行初略对水质的检测、和检测地方的3D还原（适用于打捞，考古）">
+    <meta name="description" content="一、Transformer1 概念Transformer是一种深度学习架构，它的核心思想是：  通过注意力机制(Attention)捕捉序列中不同部分之间的关系，而不是像以前的模型(如 RNN)那样一步步按顺序处理。  Transformer 的特点   并行计算：不像 RNN 需要一步步计算，Transformer 可以同时处理所有输入。 捕捉长距离依赖：通过注意力机制，Transformer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="深眸慧扫项目">
-<meta property="og:url" content="http://example.com/2025/04/24/%E6%B0%B4%E4%B8%8B%E6%9C%BA%E5%99%A8%E4%BA%BA%E6%80%9D%E8%B7%AF/index.html">
+<meta property="og:title" content="自然语言处理">
+<meta property="og:url" content="http://example.com/2025/07/09/%E8%87%AA%E7%84%B6%E8%AF%AD%E8%A8%80%E5%A4%84%E7%90%86/index.html">
 <meta property="og:site_name" content="Alaskaboo&#39;s Blog">
-<meta property="og:description" content="水下机器人思路 规格：15寸左右大小 定位：小型垃圾打捞 功能：  前期主要是线缆连接控制、后期看能否进行遥控设置，分为AI打捞和人工操作打捞 可视化平台设计  辅助功能：后期进行初略对水质的检测、和检测地方的3D还原（适用于打捞，考古）">
+<meta property="og:description" content="一、Transformer1 概念Transformer是一种深度学习架构，它的核心思想是：  通过注意力机制(Attention)捕捉序列中不同部分之间的关系，而不是像以前的模型(如 RNN)那样一步步按顺序处理。  Transformer 的特点   并行计算：不像 RNN 需要一步步计算，Transformer 可以同时处理所有输入。 捕捉长距离依赖：通过注意力机制，Transformer">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625213306057.png">
-<meta property="article:published_time" content="2025-04-24T10:41:20.000Z">
-<meta property="article:modified_time" content="2025-06-28T02:17:50.593Z">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708194608046.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708201514730.png">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708204939021.png">
+<meta property="article:published_time" content="2025-07-09T06:33:02.000Z">
+<meta property="article:modified_time" content="2025-07-09T12:38:49.730Z">
 <meta property="article:author" content="Alaskaboo">
-<meta property="article:tag" content="学生项目">
-<meta property="article:tag" content="比赛">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="深度学习">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625213306057.png">
+<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708194608046.png">
   
   
   
-  <title>深眸慧扫项目 - Alaskaboo&#39;s Blog</title>
+  <title>自然语言处理 - Alaskaboo&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -228,7 +230,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="深眸慧扫项目"></span>
+            <span id="subtitle" data-typed-text="自然语言处理"></span>
           
         </div>
 
@@ -239,8 +241,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-04-24 18:41" pubdate>
-          2025年4月24日 晚上
+        <time datetime="2025-07-09 14:33" pubdate>
+          2025年7月9日 下午
         </time>
       </span>
     
@@ -251,7 +253,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          98 字
+          343 字
         
       </span>
     
@@ -262,7 +264,7 @@
         
         
         
-          1 分钟
+          3 分钟
         
       </span>
     
@@ -308,20 +310,48 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">深眸慧扫项目</h1>
+            <h1 id="seo-header">自然语言处理</h1>
             
             
               <div class="markdown-body">
                 
-                <p>水下机器人思路</p>
-<p>规格：15寸左右大小</p>
-<p>定位：小型垃圾打捞</p>
-<p>功能：</p>
+                <h1 id="一、Transformer"><a href="#一、Transformer" class="headerlink" title="一、Transformer"></a>一、Transformer</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1 概念"></a>1 概念</h2><p>Transformer是一种深度学习架构，它的核心思想是：</p>
+<blockquote>
+<p>通过注意力机制(Attention)捕捉序列中不同部分之间的关系，而不是像以前的模型(如 RNN)那样一步步按顺序处理。</p>
+</blockquote>
+<p>Transformer 的特点</p>
+<blockquote>
 <ul>
-<li>前期主要是线缆连接控制、后期看能否进行遥控设置，分为<strong>AI打捞</strong>和<strong>人工操作打捞</strong></li>
-<li>可视化平台设计</li>
+<li>并行计算：不像 RNN 需要一步步计算，Transformer 可以同时处理所有输入。</li>
+<li>捕捉长距离依赖：通过注意力机制，Transformer 可以轻松捕捉序列中相隔很远的部分之间的关系。</li>
+<li>扩展性强：Transformer 可以堆看很多层，形成超大的模型。</li>
 </ul>
-<p>辅助功能：后期进行初略对水质的检测、和检测地方的3D还原（适用于打捞，考古）</p>
+</blockquote>
+<h2 id="2-架构"><a href="#2-架构" class="headerlink" title="2 架构"></a>2 架构</h2><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708194608046.png" srcset="/img/loading.gif" lazyload alt="image-20250708194607829"></p>
+<h3 id="正则化"><a href="#正则化" class="headerlink" title="正则化"></a>正则化</h3><p><strong>在 Transformer 中使用的是 Layer Normalization</strong>，而非 Batch Normalization。</p>
+<blockquote>
+<p>相同点：</p>
+</blockquote>
+<p>两者都属于归一化方法，目的是提升模型训练的稳定性与效率。</p>
+<blockquote>
+<p>区别：</p>
+</blockquote>
+<p>BatchNorm 通常用于计算机视觉领域，对每个通道在 batch 维度上进行归一化，适合定长输入；而 LayerNorm 是对每个样本的特征维度进行归一化，适应性强，不依赖 batch 大小，特别适合 NLP 中的变长输入和 Transformer 架构。</p>
+<h3 id="缩放点积注意力机制"><a href="#缩放点积注意力机制" class="headerlink" title="缩放点积注意力机制"></a>缩放点积注意力机制</h3><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708201514730.png" srcset="/img/loading.gif" lazyload alt="image-20250708201514628" style="zoom: 33%;" />
+
+<h3 id="多头注意力机制"><a href="#多头注意力机制" class="headerlink" title="多头注意力机制"></a>多头注意力机制</h3><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250708204939021.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="Decoder"><a href="#Decoder" class="headerlink" title="Decoder"></a>Decoder</h3><ul>
+<li><p>train的时候并行化</p>
+</li>
+<li><p>Inference的时候仍要序列式完成</p>
+</li>
+<li><p>Self-attention时前词不能见后词</p>
+<ul>
+<li>Mask来实现</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-技术"><a href="#2-技术" class="headerlink" title="2 技术"></a>2 技术</h2><h3 id="word2vec"><a href="#word2vec" class="headerlink" title="word2vec"></a>word2vec</h3><p>优点：快，计算量小，cpu上就能跑<br>缺点：全局信息不足，多义词问题未解决</p>
 
                 
               </div>
@@ -340,7 +370,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%AF%94%E8%B5%9B/" class="category-chain-item">比赛</a>
+  <a href="/categories/%E8%AE%BA%E6%96%87/" class="category-chain-item">论文</a>
   
   
 
@@ -355,9 +385,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%AD%A6%E7%94%9F%E9%A1%B9%E7%9B%AE/" class="print-no-link">#学生项目</a>
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
       
-        <a href="/tags/%E6%AF%94%E8%B5%9B/" class="print-no-link">#比赛</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
       
     </div>
   
@@ -369,8 +399,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>深眸慧扫项目</div>
-      <div>http://example.com/2025/04/24/水下机器人思路/</div>
+      <div>自然语言处理</div>
+      <div>http://example.com/2025/07/09/自然语言处理/</div>
     </div>
     <div class="license-meta">
       
@@ -382,13 +412,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年4月24日</div>
+          <div>2025年7月9日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年6月28日</div>
+          <div>2025年7月9日</div>
         </div>
       
       
@@ -419,18 +449,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/05/25/kaggle%E5%85%B3%E4%BA%8E%E6%A0%91%E5%8F%B6%E7%9A%84%E7%AB%9E%E8%B5%9B%E6%80%BB%E7%BB%93/" title="kaggle关于树叶的竞赛总结">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">kaggle关于树叶的竞赛总结</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/03/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" title="Machine Learning">
-                        <span class="hidden-mobile">Machine Learning</span>
+                      <a href="/2025/07/07/%E5%85%B3%E4%BA%8Ebatch-normlization%E7%9A%84%E9%97%AE%E9%A2%98/" title="关于batch_normlization问题">
+                        <span class="hidden-mobile">关于batch_normlization问题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
