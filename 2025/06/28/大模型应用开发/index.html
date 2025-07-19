@@ -29,7 +29,7 @@
 <meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250703164816821.png">
 <meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250701193044653.png">
 <meta property="article:published_time" content="2025-06-28T02:17:00.000Z">
-<meta property="article:modified_time" content="2025-07-15T07:17:25.102Z">
+<meta property="article:modified_time" content="2025-07-18T12:54:39.146Z">
 <meta property="article:author" content="Alaskaboo">
 <meta property="article:tag" content="深度学习">
 <meta property="article:tag" content="项目">
@@ -532,23 +532,24 @@
 
 <h1 id="五、模型开发"><a href="#五、模型开发" class="headerlink" title="五、模型开发"></a>五、模型开发</h1><h2 id="1-学习路线"><a href="#1-学习路线" class="headerlink" title="1 学习路线"></a>1 学习路线</h2><p>首先安装Openai库：pip install openai </p>
 <p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250701193044653.png" srcset="/img/loading.gif" lazyload alt="image-20250701193044559"></p>
-<h2 id="2-模型参数"><a href="#2-模型参数" class="headerlink" title="2 模型参数"></a>2 模型参数</h2><p>**model：**必选参数，大模型的名称messages:必选参数，提示词；</p>
-<p>**max_tokens：**可选参数，代表返回结果的token数量；</p>
-<p>**temperature：**可选参数，取值范围为0-2，默认值为1。参数代表采样温度，数值越小，则模型会倾向于选择概率较高的词汇，生成的文本会更加保守;而当temperature值较高时，模型会更多地选择概率较低的词汇，生成的文本会更加多样；</p>
-<p>**top_p：**可选参数，取值范围为0-1，默认值为1，和temperature作用类似，用于控制输出文本的随机性，数值越趋近与1，输出文本随机性越强，越趋近于0文本随机性越弱；</p>
+<h2 id="2-模型参数"><a href="#2-模型参数" class="headerlink" title="2 模型参数"></a>2 模型参数</h2><p><strong>model：</strong> 必选参数，大模型的名称；</p>
+<p><strong>messages：</strong> 必选参数，提示词；</p>
+<p><strong>max_tokens：</strong> 可选参数，代表返回结果的token数量；</p>
+<p><strong>temperature</strong>：可选参数，取值范围为0-2，默认值为1。参数代表采样温度，数值越小，则模型会倾向于选择概率较高的词汇，生成的文本会更加保守;而当temperature值较高时，模型会更多地选择概率较低的词汇，生成的文本会更加多样；</p>
+<p><strong>top_p</strong>：可选参数，取值范围为0-1，默认值为1，和temperature作用类似，用于控制输出文本的随机性，数值越趋近与1，输出文本随机性越强，越趋近于0文本随机性越弱；</p>
 <blockquote>
 <p>top_p和temperature两个参数选择一个进行调整即可；这里更推荐使用temperature参数进行文本随机性调整;</p>
 </blockquote>
-<p>**n：**可选参数，默认值为1，表示一个提示返回几个Completion；</p>
-<p>**stream：**可选参数，默认值为False，表示回复响应的方式，当为False时，模型会等待返回结果全部生成后一次性返回全部结果，而为True时，则会逐个字进行返回；</p>
-<p>**stop：**可选参数，默认为null，该参数接受一个或多个字符串，用于指定生成文本的停止信号。当模型生成的文本遇到这些字符串中的任何一个时，会立即停止生成。这可以用来控制模型的输出长度或格式；</p>
+<p><strong>n</strong>：可选参数，默认值为1，表示一个提示返回几个Completion；</p>
+<p><strong>stream</strong>：可选参数，默认值为False，表示回复响应的方式，当为False时，模型会等待返回结果全部生成后一次性返回全部结果，而为True时，则会逐个字进行返回；</p>
+<p><strong>stop</strong>：可选参数，默认为null，该参数接受一个或多个字符串，用于指定生成文本的停止信号。当模型生成的文本遇到这些字符串中的任何一个时，会立即停止生成。这可以用来控制模型的输出长度或格式；</p>
 <blockquote>
 <p>分别用于控制生成文本中新单词的出现频率和单词的重复频率，可以避免生成的文本过于重复或单调</p>
 </blockquote>
-<p>**presence penalty：**可选参数，默认为0，取值范围为[-2, 2]，该参数用于调整模型生成新内容(例如新的概念或主题)的倾向性。较高的值会使模型更倾向于生成新内容，而较低的值则会使模型更倾向于坚持已有的内容，当返回结果篇幅较大并且存在前后主题重复时，可以提高该参数的取值；</p>
-<p>**frequency penalty：**可选参数，默认为0，取值范围为[-2, 2]，该参数用于调整模型重复自身的倾向性。较高的值会使模型更倾向于避免重复，而较低的值则会使模型更可能重复自身;当返回结果篇幅较大并且存在前后语言重复时，可以提高该参数的取值；</p>
-<p>**tools：**可以调用的函数；</p>
-<p>**tool choice：**调用函数的策略；</p>
+<p><strong>presence penalty</strong>：可选参数，默认为0，取值范围为[-2, 2]，该参数用于调整模型生成新内容(例如新的概念或主题)的倾向性。较高的值会使模型更倾向于生成新内容，而较低的值则会使模型更倾向于坚持已有的内容，当返回结果篇幅较大并且存在前后主题重复时，可以提高该参数的取值；</p>
+<p><strong>frequency penalty</strong>：可选参数，默认为0，取值范围为[-2, 2]，该参数用于调整模型重复自身的倾向性。较高的值会使模型更倾向于避免重复，而较低的值则会使模型更可能重复自身;当返回结果篇幅较大并且存在前后语言重复时，可以提高该参数的取值；</p>
+<p><strong>tools</strong>：可以调用的函数；</p>
+<p><strong>tool choice</strong>：调用函数的策略；</p>
 <h2 id="3-Embeddings模型"><a href="#3-Embeddings模型" class="headerlink" title="3 Embeddings模型"></a>3 Embeddings模型</h2><p>概念：Embeddings（嵌入）在自然语言处理（NLP）中起着至关重要的作用，它们的主要目的是将高维、离散的文本数据（如单词或短语）转换为低维、连续的向量表示。这些向量不仅编码了词本身的含义，还捕捉到了词语之间的语义和句法关系。通过embeddings，原本难以直接处理的文本数据可以被机器学习模型理解和操作。</p>
 <p>计算模型相似度：</p>
 <blockquote>
@@ -557,7 +558,7 @@
 </blockquote>
 <h2 id="4-训练私有模型"><a href="#4-训练私有模型" class="headerlink" title="4 训练私有模型"></a>4 训练私有模型</h2><ul>
 <li><strong>确认应用场景</strong>：确定模型能力、并进行模型选择</li>
-<li><strong>数据处理</strong>：数据采集、数据清洗、<em><em>数据配比</em>（垂直和通用、每个数据源的配比）</em>*</li>
+<li><strong>数据处理</strong>：数据采集、数据清洗、<strong>数据配比（垂直和通用、每个数据源的配比）</strong></li>
 <li><strong>预训练</strong>：模型设计（size、结构、专有领域的tokenizer）</li>
 <li>Fine-Tuning</li>
 <li>benchmark：对训练模型进行评测</li>
@@ -628,7 +629,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年7月15日</div>
+          <div>2025年7月18日</div>
         </div>
       
       
