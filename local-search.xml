@@ -8,7 +8,7 @@
     <link href="/2025/07/17/YOLOv9%E8%AE%BA%E6%96%87/"/>
     <url>/2025/07/17/YOLOv9%E8%AE%BA%E6%96%87/</url>
     
-    <content type="html"><![CDATA[<h1 id="一、论文地位"><a href="#一、论文地位" class="headerlink" title="一、论文地位"></a>一、论文地位</h1><p>阅读论文时我通常先查看摘要和结论，以快速把握其核心内容与研究方向。</p><h2 id="1-1-核心技术创新：突破深度网络的信息瓶颈"><a href="#1-1-核心技术创新：突破深度网络的信息瓶颈" class="headerlink" title="1.1 核心技术创新：突破深度网络的信息瓶颈"></a>1.1 核心技术创新：突破深度网络的信息瓶颈</h2><ol><li><p><strong>可编程梯度信息（PGI）</strong></p><p>为解决轻量级模型中从 I(X, X) 准确提取 I(Y, X) 的难题，作者提出了新的辅助监督框架：可编程梯度信息（PGI, Programmable Gradient Information）。</p><ul><li><strong>问题背景</strong>：传统深度网络在逐层特征提取中易丢失关键信息，导致梯度更新偏差，模型预测错误。</li><li><strong>解决方案</strong>：PGI通过引入辅助可逆分支，在训练时生成可靠梯度，确保深层特征保留目标任务所需的关键信息。</li><li><strong>优势</strong>：<ul><li><strong>无额外推理成本</strong>：辅助分支仅在训练阶段使用，推理时仅保留主分支。</li><li><strong>灵活性</strong>：支持自定义损失函数，适配不同任务需求。</li><li><strong>普适性</strong>：适用于从轻量级到大型模型的训练，尤其对小模型效果显著。</li></ul></li></ul></li><li><p><strong>通用高效层聚合网络（GELAN）</strong></p><ul><li><strong>架构设计</strong>：结合CSPNet的跨级部分连接与ELAN的高效层聚合，通过梯度路径规划优化特征传播。</li><li>核心优势：<ul><li><strong>轻量化与高效性</strong>：仅使用传统卷积算子，参数利用率超越依赖深度可分卷积的SOTA模型（如YOLOv8）。</li><li><strong>灵活性</strong>：支持用户根据硬件平台（如CPU、GPU、边缘设备）选择计算模块，平衡速度与精度。</li></ul></li><li><strong>性能验证</strong>：在MS-COCO数据集上，GELAN架构的模型在参数效率上显著优于现有技术，<font color='blue'><strong>相较YOLOv8，YOLOv9参数数量减少了<font color='red'>49%</font>，计算量减少了<font color='red'>43%</font>，同时准确率提升了<font color='red'>0.6%</font>。</strong></font></li></ul><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250719144434760.png" alt="GELAN"></p></li></ol><h2 id="2-2-行业地位：推动目标检测技术边界"><a href="#2-2-行业地位：推动目标检测技术边界" class="headerlink" title="2.2 行业地位：推动目标检测技术边界"></a>2.2 行业地位：推动目标检测技术边界</h2><ol><li>技术革新标杆<ul><li><strong>理论突破</strong>：从可逆函数角度分析深度网络信息丢失问题，提出PGI与GELAN架构，为模型设计提供新范式。</li><li><strong>开源生态</strong>：代码与论文公开，推动学术界与工业界研究，加速技术迭代。</li></ul></li><li>未来趋势影响<ul><li><strong>轻量化与高效化</strong>：YOLOv9的GELAN架构为实时检测模型设计提供新思路，推动行业向更高效的方向发展。</li><li><strong>多模态融合</strong>：其技术可扩展至视频理解、3D目标检测等领域，支持更复杂的智能系统构建。</li></ul></li></ol><h1 id="二、提出背景"><a href="#二、提出背景" class="headerlink" title="二、提出背景"></a>二、提出背景</h1><p>YOLOv9的提出主要基于解决<strong>深度神经网络中的信息丢失问题</strong>，并提升目标检测模型在速度与精度之间的平衡：</p><ol><li><p><strong>信息瓶颈现象</strong>：深度神经网络在逐层提取和变换过程中会丢失关键信息，形成信息瓶颈，进而导致梯度偏差，影响模型对目标特征的准确学习。</p></li><li><p><strong>现有方法的局限性</strong>：</p><ul><li><p>可逆架构：需要附加层来组合重复输入的数据，显著增加推理成本。</p></li><li><p>掩模建模：重建损失有时与目标损失相冲突。</p></li><li><p>深度监督机制：会产生误差积累，浅层监督丢失信息后，后续层无法检索所需信息</p></li></ul></li></ol><h1 id="三、模型架构"><a href="#三、模型架构" class="headerlink" title="三、模型架构"></a>三、模型架构</h1><p>这张架构图清晰呈现了YOLOv9的创新网络设计，<font color='red'><strong>其核心聚焦于解决深度神经网络训练中的信息丢失问题</strong></font>，以此提升目标检测的精度与效率。架构中主、辅分支协同作业，PGI架构更凭借二者的紧密配合、辅助可逆分支的可逆设计以及对辅助信息的有效利用，成功化解信息丢失难题。</p><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250719143031979.png" alt="YOLOv9架构图"></p><p><strong>主分支（Main Branch，浅蓝色方块）</strong></p><blockquote><ul><li><strong>功能定位</strong>：承担从输入图像中提取关键特征并进行最终预测的任务。</li><li><strong>处理流程</strong>：<ul><li>输入图像经过一系列卷积层、激活函数层等操作，逐步提取特征，从低级边缘、纹理信息到高级语义信息。</li><li>特征图尺寸可能减小，通道数增加，以捕捉更复杂特征。</li></ul></li><li><strong>预测输出</strong>：通过预测头输出目标检测结果，包括类别概率、边界框坐标等信息。</li></ul></blockquote><p><strong>辅助分支（Auxiliary Branch，灰色方块）</strong></p><blockquote><ul><li><strong>核心作用</strong>：在训练过程中为主分支提供额外的梯度信息，帮助主分支更好地学习和调整参数。</li><li><strong>结构设计</strong>：<ul><li>采用类似U-Net的跳跃连接结构，在不同层次上与主分支进行信息交互。</li><li>从主分支不同阶段获取特征图，通过池化操作下采样，提取更抽象特征，再通过上采样恢复尺寸，便于融合。</li></ul></li></ul></blockquote><blockquote><ul><li><strong>信息融合</strong>：将处理后的特征信息与主分支的特征信息进行融合，方式可以是拼接或加权求和等，使主分支获取更全面的信息，生成更准确的梯度用于反向传播。</li></ul></blockquote><p><strong>辅助可逆分支（Auxiliary Reversible Branch，蓝色虚线框内）</strong></p><blockquote><ul><li><strong>可逆设计原理</strong>：关键特性是可逆性，确保训练过程中输入信息可通过运算过程完整恢复，通过精心设计的运算和存储机制实现。</li><li><strong>操作过程</strong>：进行池化和上采样等操作，池化降低分辨率、提取主要特征，上采样恢复分辨率，与其他层次特征融合，为主分支提供高质量梯度信息。</li></ul></blockquote><p><strong>多级辅助信息（Multi-level Auxiliary Information，粉红色虚线框）</strong></p><blockquote><ul><li><strong>信息来源与作用</strong>：辅助分支处理过程中产生的额外信息，包括不同层次的特征表示、中间计算结果等，为训练过程提供更多上下文信息，帮助主分支更好地理解输入图像的复杂特征。</li></ul></blockquote><p><strong>信息流动细节</strong></p><blockquote><ol><li><strong>输入阶段</strong>：输入图像位于图的左下角，它包含了需要检测的目标（如图中的狗和汽车）。</li><li><strong>主分支初始处理</strong>：输入图像进入主分支后，首先经过一些基础的卷积层，这些层会对图像进行初步的特征提取，例如检测图像中的边缘和纹理信息。</li><li><strong>辅助分支介入与信息交互</strong>：在主分支处理的过程中，辅助分支开始工作。辅助分支从主分支的不同层次获取特征图，并进行池化操作，将特征图的尺寸缩小，同时提取更抽象的特征。然后，辅助分支通过上采样操作将特征图的尺寸恢复到与主分支相应层次相同的尺寸，并与主分支的特征图进行融合。这种融合操作使得主分支能够获取到辅助分支提供的额外信息。</li><li><strong>梯度生成与反向传播</strong>：融合后，辅助分支生成高质量梯度，通过反向传播更新主分支参数。通过这种方式，主分支能够根据辅助分支提供的梯度信息，更好地调整自身的参数，以提高目标检测的准确性。</li><li><strong>预测输出阶段</strong>：经过多层处理和特征融合后，主分支通过预测头输出最终的目标检测结果。预测头会根据学习到的特征信息，对图像中的目标进行分类和定位，输出目标的类别、边界框的坐标等信息。</li></ol></blockquote><h1 id="四、训练"><a href="#四、训练" class="headerlink" title="四、训练"></a>四、训练</h1><ol><li><strong>训练设置</strong><ul><li>实验采用MS COCO 2017数据集，遵循YOLOv7 AF设置，模型从头开始训练500个epoch。</li><li>学习率设置：前3个epoch采用线性预热；后续epoch依据模型规模设定相应衰减方式；最后15个epoch关闭mosaic。</li></ul></li><li><strong>模型构建与架构设计</strong><ul><li>基于YOLOv7和Dynamic YOLOv7 构建YOLOv9的通用版本和扩展版本。</li><li>网络架构设计：使用带有计划RepConv的CSPNet模块，以GELAN替代ELAN，简化下采样模块，并优化无锚框预测头。</li></ul></li></ol>]]></content>
+    <content type="html"><![CDATA[<p>YOLOv9 是 YOLO 系列目标检测模型的最新版本之一，由 YOLOv7的原班团队Chien-Yao Wang等人2024年2月提出，其设计旨在进一步提升检测性能与推理效率。</p><h1 id="一、论文地位"><a href="#一、论文地位" class="headerlink" title="一、论文地位"></a>一、论文地位</h1><p>阅读论文时我通常先查看摘要和结论，以快速把握其核心内容与研究方向。</p><h2 id="1-1-核心技术创新：突破深度网络的信息瓶颈"><a href="#1-1-核心技术创新：突破深度网络的信息瓶颈" class="headerlink" title="1.1 核心技术创新：突破深度网络的信息瓶颈"></a>1.1 核心技术创新：突破深度网络的信息瓶颈</h2><ol><li><p><strong>可编程梯度信息（PGI）</strong></p><p>为解决轻量级模型中从 I(X, X) 准确提取 I(Y, X) 的难题，作者提出了新的辅助监督框架：可编程梯度信息（PGI, Programmable Gradient Information）。</p><ul><li><strong>问题背景</strong>：传统深度网络在逐层特征提取中易丢失关键信息，导致梯度更新偏差，模型预测错误。</li><li><strong>解决方案</strong>：PGI通过引入辅助可逆分支，在训练时生成可靠梯度，确保深层特征保留目标任务所需的关键信息。</li><li><strong>优势</strong>：<ul><li><strong>无额外推理成本</strong>：辅助分支仅在训练阶段使用，推理时仅保留主分支。</li><li><strong>灵活性</strong>：支持自定义损失函数，适配不同任务需求。</li><li><strong>普适性</strong>：适用于从轻量级到大型模型的训练，尤其对小模型效果显著。</li></ul></li></ul></li><li><p><strong>通用高效层聚合网络（GELAN）</strong></p><ul><li><strong>架构设计</strong>：结合CSPNet的跨级部分连接与ELAN的高效层聚合，通过梯度路径规划优化特征传播。</li><li>核心优势：<ul><li><strong>轻量化与高效性</strong>：仅使用传统卷积算子，参数利用率超越依赖深度可分卷积的SOTA模型（如YOLOv8）。</li><li><strong>灵活性</strong>：支持用户根据硬件平台（如CPU、GPU、边缘设备）选择计算模块，平衡速度与精度。</li></ul></li><li><strong>性能验证</strong>：在MS-COCO数据集上，GELAN架构的模型在参数效率上显著优于现有技术，<font color='blue'><strong>相较YOLOv8，YOLOv9参数数量减少了<font color='red'>49%</font>，计算量减少了<font color='red'>43%</font>，同时准确率提升了<font color='red'>0.6%</font>。</strong></font></li></ul><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250719144434760.png" alt="GELAN"></p></li></ol><h2 id="2-2-行业地位：推动目标检测技术边界"><a href="#2-2-行业地位：推动目标检测技术边界" class="headerlink" title="2.2 行业地位：推动目标检测技术边界"></a>2.2 行业地位：推动目标检测技术边界</h2><ol><li>技术革新标杆<ul><li><strong>理论突破</strong>：从可逆函数角度分析深度网络信息丢失问题，提出PGI与GELAN架构，为模型设计提供新范式。</li><li><strong>开源生态</strong>：代码与论文公开，推动学术界与工业界研究，加速技术迭代。</li></ul></li><li>未来趋势影响<ul><li><strong>轻量化与高效化</strong>：YOLOv9的GELAN架构为实时检测模型设计提供新思路，推动行业向更高效的方向发展。</li><li><strong>多模态融合</strong>：其技术可扩展至视频理解、3D目标检测等领域，支持更复杂的智能系统构建。</li></ul></li></ol><h1 id="二、提出背景"><a href="#二、提出背景" class="headerlink" title="二、提出背景"></a>二、提出背景</h1><p>YOLOv9的提出主要基于解决<strong>深度神经网络中的信息丢失问题</strong>，并提升目标检测模型在速度与精度之间的平衡：</p><ol><li><p><strong>信息瓶颈现象</strong>：深度神经网络在逐层提取和变换过程中会丢失关键信息，形成信息瓶颈，进而导致梯度偏差，影响模型对目标特征的准确学习。</p></li><li><p><strong>现有方法的局限性</strong>：</p><ul><li><p>可逆架构：需要附加层来组合重复输入的数据，显著增加推理成本。</p></li><li><p>掩模建模：重建损失有时与目标损失相冲突。</p></li><li><p>深度监督机制：会产生误差积累，浅层监督丢失信息后，后续层无法检索所需信息</p></li></ul></li></ol><h1 id="三、模型架构"><a href="#三、模型架构" class="headerlink" title="三、模型架构"></a>三、模型架构</h1><p>这张架构图清晰呈现了YOLOv9的创新网络设计，<font color='red'><strong>其核心聚焦于解决深度神经网络训练中的信息丢失问题</strong></font>，以此提升目标检测的精度与效率。架构中主、辅分支协同作业，PGI架构更凭借二者的紧密配合、辅助可逆分支的可逆设计以及对辅助信息的有效利用，成功化解信息丢失难题。</p><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250719143031979.png" alt="YOLOv9架构图"></p><p><strong>主分支（Main Branch，浅蓝色方块）</strong></p><blockquote><ul><li><strong>功能定位</strong>：承担从输入图像中提取关键特征并进行最终预测的任务。</li><li><strong>处理流程</strong>：<ul><li>输入图像经过一系列卷积层、激活函数层等操作，逐步提取特征，从低级边缘、纹理信息到高级语义信息。</li><li>特征图尺寸可能减小，通道数增加，以捕捉更复杂特征。</li></ul></li><li><strong>预测输出</strong>：通过预测头输出目标检测结果，包括类别概率、边界框坐标等信息。</li></ul></blockquote><p><strong>辅助分支（Auxiliary Branch，灰色方块）</strong></p><blockquote><ul><li><strong>核心作用</strong>：在训练过程中为主分支提供额外的梯度信息，帮助主分支更好地学习和调整参数。</li><li><strong>结构设计</strong>：<ul><li>采用类似U-Net的跳跃连接结构，在不同层次上与主分支进行信息交互。</li><li>从主分支不同阶段获取特征图，通过池化操作下采样，提取更抽象特征，再通过上采样恢复尺寸，便于融合。</li></ul></li></ul></blockquote><blockquote><ul><li><strong>信息融合</strong>：将处理后的特征信息与主分支的特征信息进行融合，方式可以是拼接或加权求和等，使主分支获取更全面的信息，生成更准确的梯度用于反向传播。</li></ul></blockquote><p><strong>辅助可逆分支（Auxiliary Reversible Branch，蓝色虚线框内）</strong></p><blockquote><ul><li><strong>可逆设计原理</strong>：关键特性是可逆性，确保训练过程中输入信息可通过运算过程完整恢复，通过精心设计的运算和存储机制实现。</li><li><strong>操作过程</strong>：进行池化和上采样等操作，池化降低分辨率、提取主要特征，上采样恢复分辨率，与其他层次特征融合，为主分支提供高质量梯度信息。</li></ul></blockquote><p><strong>多级辅助信息（Multi-level Auxiliary Information，粉红色虚线框）</strong></p><blockquote><ul><li><strong>信息来源与作用</strong>：辅助分支处理过程中产生的额外信息，包括不同层次的特征表示、中间计算结果等，为训练过程提供更多上下文信息，帮助主分支更好地理解输入图像的复杂特征。</li></ul></blockquote><p><strong>信息流动细节</strong></p><blockquote><ol><li><strong>输入阶段</strong>：输入图像位于图的左下角，它包含了需要检测的目标（如图中的狗和汽车）。</li><li><strong>主分支初始处理</strong>：输入图像进入主分支后，首先经过一些基础的卷积层，这些层会对图像进行初步的特征提取，例如检测图像中的边缘和纹理信息。</li><li><strong>辅助分支介入与信息交互</strong>：在主分支处理的过程中，辅助分支开始工作。辅助分支从主分支的不同层次获取特征图，并进行池化操作，将特征图的尺寸缩小，同时提取更抽象的特征。然后，辅助分支通过上采样操作将特征图的尺寸恢复到与主分支相应层次相同的尺寸，并与主分支的特征图进行融合。这种融合操作使得主分支能够获取到辅助分支提供的额外信息。</li><li><strong>梯度生成与反向传播</strong>：融合后，辅助分支生成高质量梯度，通过反向传播更新主分支参数。通过这种方式，主分支能够根据辅助分支提供的梯度信息，更好地调整自身的参数，以提高目标检测的准确性。</li><li><strong>预测输出阶段</strong>：经过多层处理和特征融合后，主分支通过预测头输出最终的目标检测结果。预测头会根据学习到的特征信息，对图像中的目标进行分类和定位，输出目标的类别、边界框的坐标等信息。</li></ol></blockquote><h1 id="四、训练"><a href="#四、训练" class="headerlink" title="四、训练"></a>四、训练</h1><ol><li><strong>训练设置</strong><ul><li>实验采用MS COCO 2017数据集，遵循YOLOv7 AF设置，模型从头开始训练500个epoch。</li><li>学习率设置：前3个epoch采用线性预热；后续epoch依据模型规模设定相应衰减方式；最后15个epoch关闭mosaic。</li></ul></li><li><strong>模型构建与架构设计</strong><ul><li>基于YOLOv7和Dynamic YOLOv7 构建YOLOv9的通用版本和扩展版本。</li><li>网络架构设计：使用带有计划RepConv的CSPNet模块，以GELAN替代ELAN，简化下采样模块，并优化无锚框预测头。</li></ul></li></ol>]]></content>
     
     
     <categories>
@@ -20,9 +20,9 @@
     
     <tags>
       
-      <tag>深度学习</tag>
-      
       <tag>计算机视觉</tag>
+      
+      <tag>深度学习</tag>
       
     </tags>
     
@@ -47,9 +47,9 @@
     
     <tags>
       
-      <tag>机器学习</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>机器学习</tag>
       
     </tags>
     
@@ -74,9 +74,9 @@
     
     <tags>
       
-      <tag>机器学习</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>机器学习</tag>
       
     </tags>
     
@@ -180,9 +180,9 @@
     
     <tags>
       
-      <tag>机器学习</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>机器学习</tag>
       
     </tags>
     
@@ -263,9 +263,9 @@
     
     <tags>
       
-      <tag>机器学习</tag>
-      
       <tag>计算机视觉</tag>
+      
+      <tag>机器学习</tag>
       
     </tags>
     
