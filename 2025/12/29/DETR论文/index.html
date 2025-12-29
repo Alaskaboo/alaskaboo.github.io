@@ -19,23 +19,25 @@
   <meta name="author" content="Alaskaboo">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一、论文地位yolo11主要是相对v8而言就是三个创新点 二、提出背景三、模型架构四、训练五、源码收获通过对源码进行解读收获以下的新知识 1 热力图概念：能够直观地反映模型在输入图像中“关注的区域”或者“激活强度”。 作用：  可解释性 通过热力图，你可以看到模型在判断一个图像是“猫”还是“狗”时，究竟关注的是耳朵、眼睛、背景，还是其他特征。   辅助调试与优化模型 如果模型总是检测不到某些物体，">
+    <meta name="description" content="现代检测器必须要通过一大组提议、锚框或窗口中心实现回归和分类问题，他们的性能显著受到后处理步骤，为了简化这些流程，我们提出了一种直接端到端的集合预测方法，即2020年5月发表的DETR（End-to-End Detection with Transformers）。论文我将从结构剖析、创新点分析、论文收获以及根据pytorch进行代码复现。 一、模型剖析DETR模型训练的流程简述为以下四步：  用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="YOLO11论文见解">
-<meta property="og:url" content="http://example.com/2025/08/07/YOLO11%E8%AE%BA%E6%96%87%E8%A7%81%E8%A7%A3/index.html">
+<meta property="og:title" content="DETR论文">
+<meta property="og:url" content="http://example.com/2025/12/29/DETR%E8%AE%BA%E6%96%87/index.html">
 <meta property="og:site_name" content="Alaskaboo&#39;s Blog">
-<meta property="og:description" content="一、论文地位yolo11主要是相对v8而言就是三个创新点 二、提出背景三、模型架构四、训练五、源码收获通过对源码进行解读收获以下的新知识 1 热力图概念：能够直观地反映模型在输入图像中“关注的区域”或者“激活强度”。 作用：  可解释性 通过热力图，你可以看到模型在判断一个图像是“猫”还是“狗”时，究竟关注的是耳朵、眼睛、背景，还是其他特征。   辅助调试与优化模型 如果模型总是检测不到某些物体，">
+<meta property="og:description" content="现代检测器必须要通过一大组提议、锚框或窗口中心实现回归和分类问题，他们的性能显著受到后处理步骤，为了简化这些流程，我们提出了一种直接端到端的集合预测方法，即2020年5月发表的DETR（End-to-End Detection with Transformers）。论文我将从结构剖析、创新点分析、论文收获以及根据pytorch进行代码复现。 一、模型剖析DETR模型训练的流程简述为以下四步：  用">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-08-07T07:02:34.000Z">
-<meta property="article:modified_time" content="2025-08-07T07:32:08.432Z">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251223192717222.jpg">
+<meta property="article:published_time" content="2025-12-29T07:18:42.000Z">
+<meta property="article:modified_time" content="2025-12-29T07:20:51.294Z">
 <meta property="article:author" content="Alaskaboo">
+<meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="深度学习">
-<meta property="article:tag" content="计算机视觉">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251223192717222.jpg">
   
   
   
-  <title>YOLO11论文见解 - Alaskaboo&#39;s Blog</title>
+  <title>DETR论文 - Alaskaboo&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -226,7 +228,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="YOLO11论文见解"></span>
+            <span id="subtitle" data-typed-text="DETR论文"></span>
           
         </div>
 
@@ -237,8 +239,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-08-07 15:02" pubdate>
-          2025年8月7日 下午
+        <time datetime="2025-12-29 15:18" pubdate>
+          2025年12月29日 下午
         </time>
       </span>
     
@@ -249,7 +251,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          214 字
+          2.3k 字
         
       </span>
     
@@ -260,7 +262,7 @@
         
         
         
-          2 分钟
+          19 分钟
         
       </span>
     
@@ -306,27 +308,183 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">YOLO11论文见解</h1>
+            <h1 id="seo-header">DETR论文</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="一、论文地位"><a href="#一、论文地位" class="headerlink" title="一、论文地位"></a>一、论文地位</h1><p>yolo11主要是相对v8而言就是三个创新点</p>
-<h1 id="二、提出背景"><a href="#二、提出背景" class="headerlink" title="二、提出背景"></a>二、提出背景</h1><h1 id="三、模型架构"><a href="#三、模型架构" class="headerlink" title="三、模型架构"></a>三、模型架构</h1><h1 id="四、训练"><a href="#四、训练" class="headerlink" title="四、训练"></a>四、训练</h1><h1 id="五、源码收获"><a href="#五、源码收获" class="headerlink" title="五、源码收获"></a>五、源码收获</h1><p>通过对源码进行解读收获以下的新知识</p>
-<h2 id="1-热力图"><a href="#1-热力图" class="headerlink" title="1 热力图"></a>1 热力图</h2><p><strong>概念</strong>：能够直观地反映模型在输入图像中“<strong>关注的区域</strong>”或者“<strong>激活强度</strong>”。</p>
-<p><strong>作用</strong>：</p>
+                <p>现代检测器必须要通过一大组提议、锚框或窗口中心实现回归和分类问题，他们的性能显著受到后处理步骤，为了简化这些流程，我们提出了一种直接端到端的集合预测方法，即2020年5月发表的DETR（End-to-End Detection with Transformers）。论文我将从<strong>结构剖析、创新点分析、论文收获</strong>以及根据pytorch进行<strong>代码复现</strong>。</p>
+<h1 id="一、模型剖析"><a href="#一、模型剖析" class="headerlink" title="一、模型剖析"></a>一、模型剖析</h1><p>DETR<font color='red'>模型训练的流程</font>简述为以下四步：</p>
 <ul>
-<li>可解释性<ul>
-<li>通过热力图，你可以看到模型在判断一个图像是“猫”还是“狗”时，究竟关注的是耳朵、眼睛、背景，还是其他特征。</li>
+<li>用CNN做特征提取为集合</li>
+<li>将图片特征集合输入给transformer-encoder去学习全局的特征帮助后面做检测</li>
+<li>transformer-decoder生成一系列预测框集合</li>
+<li>是将预测框的集合与真实框中去做匹配，在匹配上的框中再去算这个目标检测的loss去更新模型</li>
 </ul>
+<p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251223192717222.jpg" srcset="/img/loading.gif" lazyload alt="c0a090cd9d94381a55f45a5ec1ad2ad9"></p>
+<h2 id="1-目标检测集合预测损失"><a href="#1-目标检测集合预测损失" class="headerlink" title="1 目标检测集合预测损失"></a>1 目标检测集合预测损失</h2><h3 id="1-1-二分匹配"><a href="#1-1-二分匹配" class="headerlink" title="1.1 二分匹配"></a>1.1 二分匹配</h3><p>设计一个基于<strong>匈牙利算法</strong>的损失函数，以找到ground-truth和预测之间的二分匹配。这强制执行了排列不变性，并保证每个目标元素都有一个唯一的匹配项。但与之前的大多数工作相比，不再使用自回归模型，而是使用具有并行解码的transformers。</p>
+<blockquote>
+<p>基于注意力机制的transformer模型的主要优点之一是其全局计算和完美的记忆。</p>
+</blockquote>
+<p>最低成本计算公式是：<img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251224100918363.jpg" srcset="/img/loading.gif" lazyload alt="8e9cc2a6b1fb57d3b88ad453fc2fbdcd"></p>
+<h3 id="1-2-损失计算"><a href="#1-2-损失计算" class="headerlink" title="1.2 损失计算"></a>1.2 损失计算</h3><p>计算损失函数，上一步中所有匹配对的匈牙利损失</p>
+<p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251224101928933.jpg" srcset="/img/loading.gif" lazyload alt="463dea07c2827f2240411945b5d453d9"></p>
+<p>在论文中$c_i &#x3D; \emptyset$时，将对数概率项的权重降低十倍，以保证类别平衡。</p>
+<h3 id="1-3-边界框计算"><a href="#1-3-边界框计算" class="headerlink" title="1.3 边界框计算"></a>1.3 边界框计算</h3><p>最常用的ℓ1损失对于小框和大框也会有不同的尺度。为了缓解这个问题，我们使用ℓ1损失和广义IoU损失结合：</p>
+<p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251224105338872.jpg" srcset="/img/loading.gif" lazyload alt="d760164a671eb62e2d0bd4780f16832f"></p>
+<h2 id="2-模型架构"><a href="#2-模型架构" class="headerlink" title="2 模型架构"></a>2 模型架构</h2><blockquote>
+<p>一个用于提取紧凑特征表示的<strong>CNN骨干网络</strong>、<strong>一个编码器-解码器Transformer</strong>，以及一个进行最终检测预测的<strong>简单前馈网络（FFN）</strong></p>
+</blockquote>
+<p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251229144738902.jpg" srcset="/img/loading.gif" lazyload alt="DETR 使用传统的 CNN 主干来学习输入图像的 2D 表示"></p>
+<p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251229144757014.jpg" srcset="/img/loading.gif" lazyload alt="DETR Transformer 的架构"></p>
+<h3 id="2-1-主干backbone"><a href="#2-1-主干backbone" class="headerlink" title="2.1 主干backbone"></a>2.1 主干backbone</h3><p>将输入图片$X_{img} \in \mathbb{R}^{H_{0} \times W_{0} \times C_{0}}$ 通过<font color='red'><strong>卷积神经网络CNN</strong></font>转换成$f \in \mathbb{R}^{H \times W \times C}$</p>
+<p>注意：$C_{0}$&#x3D;3；C&#x3D;2048, $H &#x3D; \frac{H_{0}}{32}$，$W &#x3D; \frac{W_{0}}{32}$</p>
+<h3 id="2-2-Transformer架构"><a href="#2-2-Transformer架构" class="headerlink" title="2.2 Transformer架构"></a>2.2 Transformer架构</h3><h4 id="2-2-1-encoder"><a href="#2-2-1-encoder" class="headerlink" title="2.2.1 encoder"></a>2.2.1 encoder</h4><p><strong>作用：</strong></p>
+<blockquote>
+<p>将C降低到d（因为encoder想要的是一个序列），维度为1，序列长度则为$d \times HW$</p>
+</blockquote>
+<p><strong>组成：</strong></p>
+<blockquote>
+<p><font color='blue'><strong>多头注意力机制（Multi-Attention）</strong></font>——&gt;<font color='green'><strong>信息收集与混合</strong></font>——&gt;<font color='＃00BFFF'><strong>全序列交互</strong></font>（即综合考虑）</p>
+<p><font color='blue'><strong>前馈神经网络（Feed Forward Network ）</strong></font>——&gt;<font color='green'><strong>信息加工与提炼</strong></font>——&gt;<font color='＃00BFFF'><strong>位置独立处理</strong></font>（即针对处理）</p>
+</blockquote>
+<h4 id="2-2-2-decoder"><a href="#2-2-2-decoder" class="headerlink" title="2.2.2 decoder"></a>2.2.2 decoder</h4><p><strong>输入</strong>：解码器一开始就准备好 <code>N</code>个可学习的“空位”（称为“对象查询”），每个“空位”就是一个 <code>d</code>维的向量。</p>
+<p><strong>处理</strong>：解码器接收来自图像编码器的视觉特征，并通过注意力机制，让这 <code>N</code>个“<strong>空位</strong>”去“<strong>观察</strong>”和“理解”整张图片，并互相之间进行“沟通”（自注意力），最终把这 <code>N</code>个初始向量“转换”成 <code>N</code>个包含丰富物体信息的 <code>d</code>维向量（输出嵌入）。</p>
+<p><strong>输出</strong>：最后，每个输出嵌入（一个 <code>d</code>维向量）会分别通过一个简单的前馈网络，独立地预测出它对应的那个物体的<strong>类别</strong>和<strong>边界框坐标</strong>。</p>
+<h3 id="2-3-前馈神经网络"><a href="#2-3-前馈神经网络" class="headerlink" title="2.3 前馈神经网络"></a>2.3 前馈神经网络</h3><p><strong>组成：</strong></p>
+<blockquote>
+<p>ReLU、隐藏维度d和线性投影层</p>
+</blockquote>
+<p><strong>作用：</strong></p>
+<blockquote>
+<p>FFN预测归一化的中心坐标、框的高度和宽度（相对于输入图像），线性层使用softmax函数预测类别标签</p>
+</blockquote>
+<h3 id="2-4-辅助解码损失"><a href="#2-4-辅助解码损失" class="headerlink" title="2.4 辅助解码损失"></a>2.4 辅助解码损失</h3><p><strong>位置：</strong></p>
+<blockquote>
+<p>每个解码器层之后添加预测FFN和匈牙利损失</p>
+</blockquote>
+<p>使用一个额外的共享层归一化来归一化来自不同解码器层的预测FFN的输入。</p>
+<p>核心思想</p>
+<blockquote>
+<p>“一路监督，多路受益“</p>
+</blockquote>
+<p>辅助解码损失通过在主输出之外，额外在模型的<strong>中间层（例如解码器的某一中间层）</strong> 添加辅助的输出层，并计算损失。这个辅助损失会和主损失结合，共同指导模型参数的更新，从而让中间层也能得到更直接的训练反馈。</p>
+<p>DETR启用辅助损失（<code>aux_loss=True</code>）时，模型会返回每个解码器层的输出字典列表，而不仅仅是最终层的输出。这些中间层的输出会参与到整体损失的计算中。</p>
+<p>💡 核心作用</p>
+<p>辅助解码损失通过其独特的工作机制，主要在以下几个方面发挥作用：</p>
+<ul>
+<li><p><strong>缓解梯度消失，改善训练动态</strong>：通过将损失信号“注射”到网络中间层，辅助损失提供了更短的梯度传播路径，有助于梯度更有效地反向传播，缓解深层网络中的梯度消失问题，使训练过程更稳定、收敛更快。</p>
 </li>
-<li>辅助调试与优化模型<ul>
-<li>如果模型总是检测不到某些物体，可以用热力图分析模型是否根本没关注到目标区域；</li>
-<li>可用于对比不同网络结构、训练轮数对注意力区域的影响，从而优化网络设计</li>
-</ul>
+<li><p><strong>提供中间监督，增强表征学习</strong>：辅助损失相当于为中间层的特征学习提供了明确的监督目标，引导网络在中间层就学习到更有意义的特征表示，防止其“跑偏”，往往能使最终学到的特征更具判别力。</p>
+</li>
+<li><p><strong>实现隐式模型集成</strong>：不同深度的解码层其“专业领域”可能略有不同。较低层可能捕捉更细节的局部信息，较高层则整合更全局的上下文。辅助损失鼓励这些不同层的输出都做出正确预测，其效果类似于将不同深度模型的优势进行了集成，从而可能提升最终模型的鲁棒性和泛化能力。</p>
 </li>
 </ul>
-<h2 id="2-DFL"><a href="#2-DFL" class="headerlink" title="2 DFL"></a>2 DFL</h2>
+<h1 id="二、创新点"><a href="#二、创新点" class="headerlink" title="二、创新点"></a>二、创新点</h1><ul>
+<li>在detr模型中移除基于一些初始猜测进行预测这种手工设计的流程，并通过直接预测检测集合（相对于输入图像的绝对框预测，而不是锚框）来简化检测过程。两阶段检测器预测框相对于候选区域，而单阶段方法预测框相对于锚框或可能的对象中心网格。这些系统的最终性能在很大程度上取决于这些初始猜测的设置方式。</li>
+<li>直接集合预测的二分匹配损失的目标检测系统的新设计。</li>
+<li>DETR易于实现，并且具有灵活的架构，可以轻松扩展到全景分割，并获得具有竞争力的结果。</li>
+</ul>
+<h1 id="三、论文收获"><a href="#三、论文收获" class="headerlink" title="三、论文收获"></a>三、论文收获</h1><p>之前的似然函数和负对数似然函数学的不好，所以这次在这篇论文中重新看看</p>
+<h2 id="1-似然函数"><a href="#1-似然函数" class="headerlink" title="1 似然函数"></a>1 似然函数</h2><h3 id="1️⃣-概念理解"><a href="#1️⃣-概念理解" class="headerlink" title="1️⃣ 概念理解"></a>1️⃣ 概念理解</h3><p>似然函数：在“参数固定未知、数据已观测”的前提下，衡量“这组参数生成当前数据的合理程度”。相当于就是在调整权重参数。它和概率有很大的区别：</p>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>自变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>概率</td>
+<td>数据是自变量，参数固定</td>
+<td>给定参数，数据出现的可能性</td>
+</tr>
+<tr>
+<td>似然</td>
+<td>参数是自变量，数据固定</td>
+<td>给定数据，参数有多合理</td>
+</tr>
+</tbody></table>
+<h4 id="2️⃣-数学定义"><a href="#2️⃣-数学定义" class="headerlink" title="2️⃣ 数学定义"></a>2️⃣ 数学定义</h4><p>假设：</p>
+<ul>
+<li>数据：$x_1,x_2,…,x_n$</li>
+<li>模型参数：$\theta$</li>
+<li>数据服从分布：$p(x \mid \theta)$</li>
+</ul>
+<p>那么<strong>似然函数</strong>定义为：$\boxed{ L(\theta \mid x_1,\dots,x_n) &#x3D; \prod_{i&#x3D;1}^{n} p(x_i \mid \theta) }$</p>
+<p>⚠️ 注意：</p>
+<ul>
+<li>这是 <strong>$\theta$ 的函数</strong></li>
+<li>$x_i$ 已经观测到，是常数</li>
+</ul>
+<h4 id="3️⃣-例子（抛硬币）"><a href="#3️⃣-例子（抛硬币）" class="headerlink" title="3️⃣ 例子（抛硬币）"></a>3️⃣ 例子（抛硬币）</h4><ul>
+<li>正面概率：$\theta$</li>
+<li>抛 10 次，出现 7 次正面</li>
+</ul>
+<p>似然函数为：$L(\theta) &#x3D; \theta^7 (1-\theta)^3$</p>
+<p>问题变成：</p>
+<blockquote>
+<p>哪个 $\theta$ 最可能产生“7 次正面、3 次反面”？</p>
+</blockquote>
+<p>答案是：</p>
+<p>$\hat{\theta} &#x3D; 0.7$</p>
+<p>这就是 <strong>最大似然估计（MLE）</strong></p>
+<h2 id="2-负对数似然函数"><a href="#2-负对数似然函数" class="headerlink" title="2 负对数似然函数"></a>2 负对数似然函数</h2><h3 id="1️⃣-为什么要“取对数”？"><a href="#1️⃣-为什么要“取对数”？" class="headerlink" title="1️⃣ 为什么要“取对数”？"></a>1️⃣ 为什么要“取对数”？</h3><p>似然函数是<strong>连乘</strong>：$\prod_{i} p(x_i \mid \theta)$</p>
+<p>问题：</p>
+<ul>
+<li>数值容易下溢（非常小）</li>
+<li>计算不方便</li>
+</ul>
+<p>👉 解决方案：<strong>取对数</strong></p>
+<p>$\log L(\theta) &#x3D; \sum_{i&#x3D;1}^n \log p(x_i \mid \theta)$</p>
+<hr>
+<h3 id="2️⃣-为什么是“负”的？"><a href="#2️⃣-为什么是“负”的？" class="headerlink" title="2️⃣ 为什么是“负”的？"></a>2️⃣ 为什么是“负”的？</h3><p>在优化里：</p>
+<ul>
+<li>我们通常 <strong>最小化损失函数</strong></li>
+<li>但 MLE 是 <strong>最大化似然</strong></li>
+</ul>
+<p>所以定义：$\boxed{ \mathcal{L}<em>{\text{NLL}}(\theta) &#x3D; - \sum</em>{i&#x3D;1}^{n} \log p(x_i \mid \theta) }$</p>
+<p>👉 <strong>最小化负对数似然 ≡ 最大化似然函数</strong></p>
+<h2 id="3-似然函数-vs-负对数似然函数（对比）"><a href="#3-似然函数-vs-负对数似然函数（对比）" class="headerlink" title="3 似然函数 vs 负对数似然函数（对比）"></a>3 似然函数 vs 负对数似然函数（对比）</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>似然函数</th>
+<th>负对数似然</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>形式</td>
+<td>乘积</td>
+<td>求和</td>
+</tr>
+<tr>
+<td>优化目标</td>
+<td>最大化</td>
+<td>最小化</td>
+</tr>
+<tr>
+<td>数值稳定性</td>
+<td>差</td>
+<td>好</td>
+</tr>
+<tr>
+<td>工程中使用</td>
+<td>少</td>
+<td><strong>非常多</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-负对数似然-常见机器学习损失函数"><a href="#4-负对数似然-常见机器学习损失函数" class="headerlink" title="4 负对数似然 &#x3D; 常见机器学习损失函数"></a>4 负对数似然 &#x3D; 常见机器学习损失函数</h2><p>这是重点，很多“损失函数”本质上就是 NLL 👇</p>
+<h3 id="1️⃣-高斯分布-→-均方误差（MSE）"><a href="#1️⃣-高斯分布-→-均方误差（MSE）" class="headerlink" title="1️⃣ 高斯分布 → 均方误差（MSE）"></a>1️⃣ 高斯分布 → 均方误差（MSE）</h3><p>假设：$y \sim \mathcal{N}(\mu, \sigma^2$</p>
+<p>NLL：$\mathcal{L} &#x3D; \frac{1}{2\sigma^2}(y-\mu)^2 + \text{常数}$</p>
+<p>👉 <strong>等价于最小化 MSE</strong></p>
+<h3 id="2️⃣-伯努利分布-→-交叉熵损失（Binary-Cross-Entropy）"><a href="#2️⃣-伯努利分布-→-交叉熵损失（Binary-Cross-Entropy）" class="headerlink" title="2️⃣ 伯努利分布 → 交叉熵损失（Binary Cross-Entropy）"></a>2️⃣ 伯努利分布 → 交叉熵损失（Binary Cross-Entropy）</h3><p>$p(y&#x3D;1)&#x3D;\hat y$</p>
+<p>NLL：$-\big[y\log \hat y + (1-y)\log(1-\hat y)\big]$</p>
+<p>👉 <strong>这就是二分类交叉熵</strong></p>
+<h3 id="3️⃣-多项分布-→-Softmax-Cross-Entropy"><a href="#3️⃣-多项分布-→-Softmax-Cross-Entropy" class="headerlink" title="3️⃣ 多项分布 → Softmax + Cross Entropy"></a>3️⃣ 多项分布 → Softmax + Cross Entropy</h3><p>👉 深度学习分类模型的标准配置</p>
+<h1 id="四、代码复现"><a href="#四、代码复现" class="headerlink" title="四、代码复现"></a>四、代码复现</h1>
                 
               </div>
             
@@ -359,9 +517,9 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
       
-        <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E8%A7%86%E8%A7%89/" class="print-no-link">#计算机视觉</a>
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
       
     </div>
   
@@ -373,8 +531,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>YOLO11论文见解</div>
-      <div>http://example.com/2025/08/07/YOLO11论文见解/</div>
+      <div>DETR论文</div>
+      <div>http://example.com/2025/12/29/DETR论文/</div>
     </div>
     <div class="license-meta">
       
@@ -386,13 +544,13 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年8月7日</div>
+          <div>2025年12月29日</div>
         </div>
       
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2025年8月7日</div>
+          <div>2025年12月29日</div>
         </div>
       
       
@@ -423,18 +581,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/12/29/DETR%E8%AE%BA%E6%96%87/" title="DETR论文">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">DETR论文</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/07/25/ResNet%E8%AE%BA%E6%96%87/" title="ResNet论文+复现">
-                        <span class="hidden-mobile">ResNet论文+复现</span>
+                      <a href="/2025/08/07/YOLO11%E8%AE%BA%E6%96%87%E8%A7%81%E8%A7%A3/" title="YOLO11论文见解">
+                        <span class="hidden-mobile">YOLO11论文见解</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -457,7 +609,7 @@
         var options = Object.assign(
           {"clientID":"Ov23liWXOySWQAe0OVjq","clientSecret":"5fb2935947fe65c42f0f5f3f2236c02901650f02","repo":"gittalk-comments","owner":"Alaskaboo","admin":["Alaskaboo"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
           {
-            id: 'e61094942f0aebc36c6a0947b8b82b69'
+            id: 'b5c4683db5170a40076a5c4abf825f54'
           }
         )
         var gitalk = new Gitalk(options);
