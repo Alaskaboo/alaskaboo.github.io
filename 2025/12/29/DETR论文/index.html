@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20251223192717222.jpg">
 <meta property="article:published_time" content="2025-12-29T07:18:42.000Z">
-<meta property="article:modified_time" content="2025-12-29T07:20:51.294Z">
+<meta property="article:modified_time" content="2025-12-29T08:32:08.370Z">
 <meta property="article:author" content="Alaskaboo">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="深度学习">
@@ -251,7 +251,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2.3k 字
+          2.2k 字
         
       </span>
     
@@ -381,9 +381,10 @@
 </li>
 </ul>
 <h1 id="二、创新点"><a href="#二、创新点" class="headerlink" title="二、创新点"></a>二、创新点</h1><ul>
-<li>在detr模型中移除基于一些初始猜测进行预测这种手工设计的流程，并通过直接预测检测集合（相对于输入图像的绝对框预测，而不是锚框）来简化检测过程。两阶段检测器预测框相对于候选区域，而单阶段方法预测框相对于锚框或可能的对象中心网格。这些系统的最终性能在很大程度上取决于这些初始猜测的设置方式。</li>
-<li>直接集合预测的二分匹配损失的目标检测系统的新设计。</li>
-<li>DETR易于实现，并且具有灵活的架构，可以轻松扩展到全景分割，并获得具有竞争力的结果。</li>
+<li><strong>端到端架构设计</strong>：去除NMS和anchor设计，减少超参与人工干预，简单有效；</li>
+<li><strong>基于Transformer的设计</strong>：encode全局学习，进一步提取特征，decode解码直接预测结果；</li>
+<li><strong>loss计算新方式</strong>：通过二分图匹配的方法将直接预测框与label做loss，实际预测100个框，将label使用某种方式也变成100个，在使用匈牙利匹配和广义IoU，计算loss；</li>
+<li><strong>提出可学习object query</strong>：在decoder输入一组可学习的object query和encoder输出的全局上下文特征，直接以并行方式强制输出最终的100个预测框；</li>
 </ul>
 <h1 id="三、论文收获"><a href="#三、论文收获" class="headerlink" title="三、论文收获"></a>三、论文收获</h1><p>之前的似然函数和负对数似然函数学的不好，所以这次在这篇论文中重新看看</p>
 <h2 id="1-似然函数"><a href="#1-似然函数" class="headerlink" title="1 似然函数"></a>1 似然函数</h2><h3 id="1️⃣-概念理解"><a href="#1️⃣-概念理解" class="headerlink" title="1️⃣ 概念理解"></a>1️⃣ 概念理解</h3><p>似然函数：在“参数固定未知、数据已观测”的前提下，衡量“这组参数生成当前数据的合理程度”。相当于就是在调整权重参数。它和概率有很大的区别：</p>
@@ -581,12 +582,18 @@
                   <article class="post-prev col-6">
                     
                     
+                      <a href="/2026/01/05/%E6%99%B6%E4%BD%93%E7%AD%9B%E9%80%89/" title="晶体筛选">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">晶体筛选</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2025/08/07/YOLO11%E8%AE%BA%E6%96%87%E8%A7%81%E8%A7%A3/" title="YOLO11论文见解">
-                        <span class="hidden-mobile">YOLO11论文见解</span>
+                      <a href="/2025/07/25/ResNet%E8%AE%BA%E6%96%87/" title="ResNet论文+复现">
+                        <span class="hidden-mobile">ResNet论文+复现</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
