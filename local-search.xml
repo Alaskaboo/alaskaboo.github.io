@@ -5,8 +5,8 @@
   
   <entry>
     <title>对文献阅读的重新认识</title>
-    <link href="/2026/03/12/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E6%96%B9%E6%B3%95/"/>
-    <url>/2026/03/12/%E6%96%87%E7%8C%AE%E9%98%85%E8%AF%BB%E6%96%B9%E6%B3%95/</url>
+    <link href="/2026/03/12/reading_paper/"/>
+    <url>/2026/03/12/reading_paper/</url>
     
     <content type="html"><![CDATA[<p>今天向本科的一位师兄（已经博士毕业且高校任职）请教问题，他连续问题让我对cv产生了重新的认识，不仅仅是文献的阅读。</p><p><font color='green'><strong>下面这是对文献的一般的看法，但是这也仅仅只是为了读懂一篇文献所能做的。</strong></font></p><h1 id="文献调研重点"><a href="#文献调研重点" class="headerlink" title="文献调研重点"></a>文献调研重点</h1><p>聚焦 <strong>2025</strong>目标检测论文，优先看 <strong>CCF-A 顶会</strong>（如 CVPR、ICCV、ECCV、NeurIPS、ICLR、AAAI），重点关注论文的 <strong>创新点、贡献表达、实验设计</strong> 和 <strong>发表时间&#x2F;会议口碑</strong>。一般 <strong>不看 CCF-B</strong>，也暂不重点看普通 IEEE Transactions 期刊。</p><h2 id="调研方法"><a href="#调研方法" class="headerlink" title="调研方法"></a>调研方法</h2><p>采用“<strong>核心论文—引用论文—对比论文</strong>”的方法：<br> 先找一篇代表性论文 A → 看谁引用了 A → 再看这些高水平论文对比了哪些方法。<br> 通过这种方式，快速扩展文献范围。</p><h2 id="阅读重点"><a href="#阅读重点" class="headerlink" title="阅读重点"></a>阅读重点</h2><p>前期不必深挖方法细节，重点看：</p><ul><li>论文解决了什么问题</li><li>创新点是什么</li><li>作者如何证明自己有创新</li><li>为什么这篇论文能发顶会&#x2F;好期刊</li></ul><h2 id="调研目标"><a href="#调研目标" class="headerlink" title="调研目标"></a>调研目标</h2><p>总结目标检测方向中，<strong>高水平论文是如何提出问题、包装创新、设计实验并说服审稿人</strong> 的。</p><h2 id="后续精读"><a href="#后续精读" class="headerlink" title="后续精读"></a>后续精读</h2><p>从中筛选值得学习的工作，优先读 <strong>有开源代码</strong> 的论文，重点分析：</p><ul><li>idea 从哪里来</li><li>为什么能想到这个方法</li><li>方法设计背后的逻辑是什么</li></ul><p><strong><font color='green'>但是，当他抛出深度学习是干什么？解决什么？什么是数据特征？什么样的网络结构更适合现在的基于优化的方式学习?等等这类问题让我回答时，我脑海没有一个清晰的认识，估计是我之前停留在一个idea做，sota了，发表、毕业的思想上，特此写下这篇blog纪念并对该问题进行思考回复</font></strong></p><h1 id="为什么这些问题很重要？"><a href="#为什么这些问题很重要？" class="headerlink" title="为什么这些问题很重要？"></a>为什么这些问题很重要？</h1><p><font color='red'><strong>因为 CV 不是只会调包、跑模型、堆模块。</strong></font></p><p>真正往上走，导师、审稿人、面试官、答辩老师最看重的是：</p><ul><li>知不知道你在解决什么问题</li><li>知不知道这个结构为什么有效</li><li>知不知道它的代价是什么</li><li>知不知道你提的模块到底改善了哪一环</li><li>能不能判断一篇论文的 contribution 是真创新还是包装</li></ul><h1 id="问题分层"><a href="#问题分层" class="headerlink" title="问题分层"></a>问题分层</h1><h2 id="第一层：必须彻底搞懂的“地基问题”"><a href="#第一层：必须彻底搞懂的“地基问题”" class="headerlink" title="第一层：必须彻底搞懂的“地基问题”"></a>第一层：必须彻底搞懂的“地基问题”</h2><p>这些是 <strong>必须清楚</strong> 的，不清楚会直接影响读论文和做实验。</p><p>包括：</p><ul><li>深度学习本质是什么：拟合 $f(x)&#x3D;y$</li><li>特征是什么</li><li>数据&#x2F;特征在网络中怎么流动</li><li>为什么 ResNet 有用</li><li>为什么需要 attention</li><li>attention 本质在做什么</li><li>现在 CV 主流框架是什么</li></ul><p>这些问题不需要你回答得特别“玄学”，但至少要能说清：</p><ul><li>输入输出是什么</li><li>模块的作用是什么</li><li>它改善的是哪一步</li><li>代价是什么</li></ul><h2 id="第二层：需要逐步形成判断力的“研究问题”"><a href="#第二层：需要逐步形成判断力的“研究问题”" class="headerlink" title="第二层：需要逐步形成判断力的“研究问题”"></a>第二层：需要逐步形成判断力的“研究问题”</h2><p>这些问题更像以后读论文、做创新时要常问自己的。</p><p>比如：</p><ul><li>现在优化 attention 之后还在优化什么</li><li>影响 CV 任务精度的主要原因是什么</li><li>为什么小目标检测会难</li><li>如何更好训练、如何更好优化</li><li>什么样的网络结构更适合当前的优化方式学习</li><li>一个 CV 论文到底解决了什么问题</li></ul><p>这一层更重要，因为它决定你会不会“看门道”。</p><p>很多同学读论文只看：</p><ul><li>mAP 提高了多少</li><li>模块长什么样</li><li>代码开没开源</li></ul><p>但更高一级的人会看：</p><ul><li>这个方法是在解决表征问题、优化问题、信息流问题，还是计算效率问题？</li><li>它是提出新问题，还是解决老问题？</li><li>它的提升来自真实机制，还是训练技巧&#x2F;实验设置红利？</li><li>它的 contribution 合不合理，是否必要？</li></ul><p><font color='green'><strong>这就是研究能力</strong>。</font></p><h2 id="第三层：可以先有轮廓、以后再深入的“抽象问题”"><a href="#第三层：可以先有轮廓、以后再深入的“抽象问题”" class="headerlink" title="第三层：可以先有轮廓、以后再深入的“抽象问题”"></a>第三层：可以先有轮廓、以后再深入的“抽象问题”</h2><p>比如：</p><ul><li>如何设计函数</li><li>什么样的结构更适合优化</li><li>为什么某类归纳偏置有效</li><li>论文不要写成“教程”，而要带着问题找答案</li><li>看论文时先问 contribution 合不合理、这个领域为什么需要它</li></ul><p>这些问题非常高级，确实重要，但不必要求自己现在一次想透。<br> 现在更需要的是：</p><blockquote><p><strong>先把它们变成固定的思考模板。</strong></p></blockquote><p>哪怕暂时答得不完美，也比完全不问强很多。</p><h1 id="对-CV-学生来说，最关键的不是“都答对”，而是“会一直追问”"><a href="#对-CV-学生来说，最关键的不是“都答对”，而是“会一直追问”" class="headerlink" title="对 CV 学生来说，最关键的不是“都答对”，而是“会一直追问”"></a>对 CV 学生来说，最关键的不是“都答对”，而是“会一直追问”</h1><p>最可贵的地方不是问题本身，而是自己的思路已经<font color='red'><strong>从“学模型”往“学问题”</strong></font>转了。</p><p>这是很重要的分水岭。</p><h2 id="普通做项目的思路"><a href="#普通做项目的思路" class="headerlink" title="普通做项目的思路"></a>普通做项目的思路</h2><ul><li>这个模块火，我加一下</li><li>这个论文 SOTA，我复现一下</li><li>这个 attention 看起来高级，我插进去试试</li></ul><h2 id="真正做研究的思路"><a href="#真正做研究的思路" class="headerlink" title="真正做研究的思路"></a>真正做研究的思路</h2><ul><li>当前瓶颈到底是什么</li><li>信息在哪一步丢了</li><li>误差主要来自表示、优化还是数据</li><li>这个模块解决的是主矛盾还是次矛盾</li><li>为什么它在这个任务有效，换任务还有效吗</li></ul><p>后者才是以后能发论文、讲清工作、做出自己东西的关键。</p><h2 id="这些问题分成“三档”"><a href="#这些问题分成“三档”" class="headerlink" title="这些问题分成“三档”"></a>这些问题分成“三档”</h2><h3 id="第一档：必须能脱口而出"><a href="#第一档：必须能脱口而出" class="headerlink" title="第一档：必须能脱口而出"></a>第一档：必须能脱口而出</h3><p>这些要非常熟：</p><ul><li>什么是特征</li><li>什么是 attention</li><li>ResNet 为什么有用</li><li>小目标为什么难</li><li>CNN 和 Transformer 各自擅长什么</li><li>一个检测框架通常由哪些部分组成</li></ul><p>这是做组会、答辩、面试时最常被问的。</p><h3 id="第二档：需要能结合论文分析"><a href="#第二档：需要能结合论文分析" class="headerlink" title="第二档：需要能结合论文分析"></a>第二档：需要能结合论文分析</h3><p>这些要能用于读论文：</p><ul><li>这篇论文解决了什么问题</li><li>是结构问题、优化问题、数据问题还是计算问题</li><li>contribution 是否成立</li><li>为什么需要这个 contribution</li><li>它改善的是精度、效率、鲁棒性还是泛化</li></ul><p>这类问题决定会不会读论文。</p><h3 id="第三档：需要长期思考"><a href="#第三档：需要长期思考" class="headerlink" title="第三档：需要长期思考"></a>第三档：需要长期思考</h3><p>这些是以后会越想越深的：</p><ul><li>什么样的网络更适合优化</li><li>数据流与梯度流的本质</li><li>表征能力和归纳偏置的平衡</li><li>局部建模与全局建模怎么统一</li><li>未来 CV 主体框架演化方向是什么</li></ul><p>这类问题不要求现在完全定论，但要经常思考。</p><h1 id="最后那几句，其实尤其关键"><a href="#最后那几句，其实尤其关键" class="headerlink" title="最后那几句，其实尤其关键"></a>最后那几句，其实尤其关键</h1><blockquote><p>多问问题，后看论文<br> 看论文要带着问题找答案<br> 不要让论文成了“教程”<br> 一个CV的论文，他解决了什么问题？<br> 他是在CV任务的哪个赛道上结局问题，是提出新问题，发现新现象，还是解决了某个问题<br> 读一个论文不知道“问什么”，就看他自己写的 contribution，先判断这个 contribution 是否合理，真的假的。然后再想：这个领域需要这个 contribution 吗？为什么需要？</p></blockquote><p>这段话其实已经很接近<strong>研究方法论</strong>了。</p><p>因为以后读任何一篇论文，都可以先问这几个问题：</p><ol><li>它的任务场景是什么？</li><li>它的核心矛盾是什么？</li><li>它的 contribution 属于哪一类？<ul><li>新任务</li><li>新现象</li><li>新结构</li><li>新训练方法</li><li>新数据集</li><li>新理论解释</li></ul></li><li>它的提升来自哪里？</li><li>这个贡献是不是这个领域真正需要的？</li></ol><p>要是一直这样读，进步会非常快。</p><h1 id="更具体一点：你至少要达到这三个能力"><a href="#更具体一点：你至少要达到这三个能力" class="headerlink" title="更具体一点：你至少要达到这三个能力"></a>更具体一点：你至少要达到这三个能力</h1><h2 id="1-能解释"><a href="#1-能解释" class="headerlink" title="1. 能解释"></a>1. 能解释</h2><p>别人问你：</p><ul><li>为什么用这个模块？</li><li>为什么 attention 有用？</li><li>为什么小目标难？</li></ul><p>不能只说“论文里都这么做”。<font color='red'><strong>要能说出机制。</strong></font></p><h2 id="2-能判断"><a href="#2-能判断" class="headerlink" title="2. 能判断"></a>2. 能判断</h2><p>看到一篇论文，你能判断：</p><ul><li>它有没有真解决问题</li><li>它的 improvement 是不是可信</li><li>它是不是只是在堆技巧</li><li>它值不值得复现和借鉴</li></ul><h2 id="3-能迁移"><a href="#3-能迁移" class="headerlink" title="3. 能迁移"></a>3. 能迁移</h2><p>能把别人的方法映射到自己的任务：</p><ul><li>这个方法适合晶体检测吗</li><li>适合小目标吗</li><li>适合弱纹理吗</li><li>适合边缘部署吗</li><li>适合现在的数据规模吗</li></ul><h1 id="现在这个阶段，我最建议做的事"><a href="#现在这个阶段，我最建议做的事" class="headerlink" title="现在这个阶段，我最建议做的事"></a>现在这个阶段，我最建议做的事</h1><p>把这些问题整理成你自己的 <strong>CV研究问题清单</strong>，以后每看一篇论文都过一遍：</p><ul><li>任务是什么</li><li>难点是什么</li><li>它解决了哪个难点</li><li>方法作用在哪一层</li><li>代价是什么</li><li>为什么有效</li><li>是否适合我的任务</li></ul><p>只要坚持这样读，后面自己写论文时，思路会比单纯“抄模块”清楚很多。</p><h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p>这是聊天记录，谨记于心！</p><p><img src="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260313134521696.png" alt="与学长聊天"></p>]]></content>
     
@@ -45,11 +45,11 @@
     
     <tags>
       
-      <tag>论文</tag>
-      
       <tag>机器学习</tag>
       
       <tag>深度学习</tag>
+      
+      <tag>论文</tag>
       
     </tags>
     
@@ -74,9 +74,9 @@
     
     <tags>
       
-      <tag>论文</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>论文</tag>
       
       <tag>计算机视觉</tag>
       
@@ -105,11 +105,11 @@
     
     <tags>
       
-      <tag>论文</tag>
-      
       <tag>机器学习</tag>
       
       <tag>深度学习</tag>
+      
+      <tag>论文</tag>
       
     </tags>
     
@@ -134,11 +134,11 @@
     
     <tags>
       
-      <tag>论文</tag>
-      
       <tag>机器学习</tag>
       
       <tag>深度学习</tag>
+      
+      <tag>论文</tag>
       
     </tags>
     
@@ -163,9 +163,9 @@
     
     <tags>
       
-      <tag>论文</tag>
-      
       <tag>深度学习</tag>
+      
+      <tag>论文</tag>
       
       <tag>计算机视觉</tag>
       
@@ -192,11 +192,11 @@
     
     <tags>
       
-      <tag>论文</tag>
-      
       <tag>机器学习</tag>
       
       <tag>深度学习</tag>
+      
+      <tag>论文</tag>
       
     </tags>
     
@@ -325,11 +325,11 @@
     
     <tags>
       
-      <tag>计算机视觉</tag>
-      
       <tag>学生项目</tag>
       
       <tag>比赛</tag>
+      
+      <tag>计算机视觉</tag>
       
     </tags>
     
