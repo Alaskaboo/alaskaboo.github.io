@@ -1,0 +1,1159 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alaskaboo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="学 CV 的过程中，几乎没人绕得开这三个词：  卷积（Convolution） ResNet Attention  它们太常见了。常见到很多时候，我们会默认自己“已经懂了”。 比如：  卷积就是提特征的 ResNet 就是加 shortcut 的 Attention 就是让模型关注重点  这些说法当然不算错，但如果只停留在这里，其实还是太表面了。 因为真正值得想清楚的问题不是“它们是什么”，而是：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？">
+<meta property="og:url" content="http://example.com/2026/03/16/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV3/index.html">
+<meta property="og:site_name" content="Alaskaboo&#39;s Blog">
+<meta property="og:description" content="学 CV 的过程中，几乎没人绕得开这三个词：  卷积（Convolution） ResNet Attention  它们太常见了。常见到很多时候，我们会默认自己“已经懂了”。 比如：  卷积就是提特征的 ResNet 就是加 shortcut 的 Attention 就是让模型关注重点  这些说法当然不算错，但如果只停留在这里，其实还是太表面了。 因为真正值得想清楚的问题不是“它们是什么”，而是：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260315150522012.png">
+<meta property="article:published_time" content="2026-03-16T04:37:28.000Z">
+<meta property="article:modified_time" content="2026-03-15T07:06:22.906Z">
+<meta property="article:author" content="Alaskaboo">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260315150522012.png">
+  
+  
+  
+  <title>【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？ - Alaskaboo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"akJv1KA0MwGLTy6JWX7w0dA4-gzGzoHsz","app_key":"tLxfRjWzNlEaAQyKovK194Yt","server_url":"https://akjv1ka0.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alaskaboo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-16 12:37" pubdate>
+          2026年3月16日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.2k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          44 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>学 CV 的过程中，几乎没人绕得开这三个词：</p>
+<ul>
+<li>卷积（Convolution）</li>
+<li>ResNet</li>
+<li>Attention</li>
+</ul>
+<p>它们太常见了。<br>常见到很多时候，我们会默认自己“已经懂了”。</p>
+<p>比如：</p>
+<ul>
+<li>卷积就是提特征的</li>
+<li>ResNet 就是加 shortcut 的</li>
+<li>Attention 就是让模型关注重点</li>
+</ul>
+<p>这些说法当然不算错，但如果只停留在这里，其实还是太表面了。</p>
+<p>因为真正值得想清楚的问题不是“它们是什么”，而是：</p>
+<ul>
+<li><strong>它们为什么会出现？</strong></li>
+<li><strong>它们分别在解决什么问题？</strong></li>
+<li><strong>为什么这些设计在视觉任务里会长期有效？</strong></li>
+<li><strong>它们各自的优势和局限是什么？</strong></li>
+</ul>
+<p>如果这些问题没有想透，那后面看各种卷积变体、残差块、注意力模块时，就很容易变成“见一个记一个”，而不是建立一条真正清晰的理解路径。</p>
+<p>所以这一篇，不想把它写成模块百科，而更想把它写成一篇<strong>问题驱动的解释</strong>：</p>
+<blockquote>
+<p>卷积、ResNet、Attention，本质上分别在补哪一块短板？</p>
+</blockquote>
+<h2 id="一、先说结论：这三个东西，其实解决的是三类不同问题"><a href="#一、先说结论：这三个东西，其实解决的是三类不同问题" class="headerlink" title="一、先说结论：这三个东西，其实解决的是三类不同问题"></a>一、先说结论：这三个东西，其实解决的是三类不同问题</h2><p>如果把这篇文章先压缩成一句话，我会这样概括：</p>
+<ul>
+<li><strong>卷积</strong> 解决的是：如何高效地从图像中提取局部模式</li>
+<li><strong>ResNet</strong> 解决的是：网络变深之后，信息和梯度怎么稳定传递</li>
+<li><strong>Attention</strong> 解决的是：哪些信息更重要，以及远距离关系如何建模</li>
+</ul>
+<p>这三者并不是互相替代的关系，而更像是在网络演化过程中，分别补上不同缺口。</p>
+<p>所以理解它们最好的方式，不是逐个孤立记忆，而是把它们放进同一条链里看：</p>
+<blockquote>
+<p><strong>先有局部特征提取的问题，于是有了卷积；<br>再遇到深层网络难训练的问题，于是有了 ResNet；<br>后来发现局部建模还不够、信息权重也不能一视同仁，于是 attention 越来越重要。</strong></p>
+</blockquote>
+<p>这条逻辑链一旦顺了，很多后面的模型变化都会更容易理解。</p>
+<h2 id="二、为什么卷积会有用？"><a href="#二、为什么卷积会有用？" class="headerlink" title="二、为什么卷积会有用？"></a>二、为什么卷积会有用？</h2><p>如果从今天往回看，卷积几乎像是视觉模型里的“基础设施”。<br>但它之所以会成为基础设施，并不是因为“它是传统”，而是因为它刚好特别适合图像这种数据。</p>
+<h3 id="1-图像不是普通向量，而是有空间结构的数据"><a href="#1-图像不是普通向量，而是有空间结构的数据" class="headerlink" title="1. 图像不是普通向量，而是有空间结构的数据"></a>1. 图像不是普通向量，而是有空间结构的数据</h3><p>一张图像最重要的特点之一，是相邻像素之间通常不是独立的。<br>也就是说，图像不是一堆打乱顺序的数字，而是有明确空间邻接关系的二维信号。</p>
+<p>例如：</p>
+<ul>
+<li>边缘通常体现在局部区域的亮度突变</li>
+<li>纹理体现在局部区域的重复模式</li>
+<li>轮廓体现在一系列相邻区域的结构变化</li>
+</ul>
+<p>所以如果模型想理解图像，它首先就得有能力处理“局部邻域里的模式”。</p>
+<p>而卷积刚好就是这样一种操作：</p>
+<blockquote>
+<p><strong>它不是全局一把抓，而是在局部窗口里扫描模式。</strong></p>
+</blockquote>
+<p>这让它天然适合视觉任务。</p>
+<h3 id="2-卷积的本质，是局部模式匹配"><a href="#2-卷积的本质，是局部模式匹配" class="headerlink" title="2. 卷积的本质，是局部模式匹配"></a>2. 卷积的本质，是局部模式匹配</h3><p>从更直观的角度讲，卷积核可以理解成一个小小的“模式探测器”。</p>
+<p>比如一个 (3\times3) 的卷积核，并不是在理解整张图，而是在问：</p>
+<ul>
+<li>这个小区域里有没有某种边缘？</li>
+<li>有没有某种纹理？</li>
+<li>有没有某种局部变化？</li>
+</ul>
+<p>不同卷积核会学到不同类型的局部模式。<br>随着层数变深，这些局部模式又会被进一步组合成更复杂的结构。</p>
+<p>所以卷积的核心价值可以概括成一句话：</p>
+<blockquote>
+<p><strong>它让模型能高效地从局部区域中提取可重复、可组合的视觉模式。</strong></p>
+</blockquote>
+<h3 id="3-为什么说卷积的归纳偏置特别适合视觉？"><a href="#3-为什么说卷积的归纳偏置特别适合视觉？" class="headerlink" title="3. 为什么说卷积的归纳偏置特别适合视觉？"></a>3. 为什么说卷积的归纳偏置特别适合视觉？</h3><p>卷积之所以长期有效，还有一个关键原因：它带有非常强的视觉归纳偏置。</p>
+<p>最重要的几个偏置包括：</p>
+<h4 id="（1）局部性"><a href="#（1）局部性" class="headerlink" title="（1）局部性"></a>（1）局部性</h4><p>卷积默认认为：<br>图像中最重要的基础信息，首先存在于局部邻域里。</p>
+<p>这和人类视觉的很多经验其实是一致的。<br>我们认边缘、认纹理、认局部形状，往往都从局部开始。</p>
+<h4 id="（2）参数共享"><a href="#（2）参数共享" class="headerlink" title="（2）参数共享"></a>（2）参数共享</h4><p>同一个卷积核会在整张图上滑动使用。<br>这意味着模型默认相信：</p>
+<blockquote>
+<p>某种有意义的模式，不会只出现在一个固定位置，而可能在很多位置重复出现。</p>
+</blockquote>
+<p>比如“边缘”不会只存在于左上角，纹理也不会只存在于中间。<br>参数共享正好对应了这一点。</p>
+<h4 id="（3）平移等变性"><a href="#（3）平移等变性" class="headerlink" title="（3）平移等变性"></a>（3）平移等变性</h4><p>如果图像中的某个模式平移了，卷积响应也会跟着平移。<br>这让卷积天然适合捕捉“同一物体在不同位置出现”的情况。</p>
+<p>所以你会发现，卷积强，不只是因为它能算特征，而是因为它对图像做了很合理的先验假设。</p>
+<h3 id="4-卷积为什么高效？"><a href="#4-卷积为什么高效？" class="headerlink" title="4. 卷积为什么高效？"></a>4. 卷积为什么高效？</h3><p>除了适合图像，卷积还有一个很现实的优点：<strong>高效</strong>。</p>
+<p>如果用全连接方式处理一张图像，参数量会大得惊人，而且会完全破坏图像的空间结构。<br>卷积则通过局部连接和参数共享，大大减少了参数量和计算量。</p>
+<p>所以卷积同时满足了三件事：</p>
+<ul>
+<li>结构上适合图像</li>
+<li>表达上能提局部模式</li>
+<li>工程上足够高效</li>
+</ul>
+<p>这就是为什么它会成为 CV 时代的长期主角。</p>
+<h2 id="三、卷积解决了什么，又没解决什么？"><a href="#三、卷积解决了什么，又没解决什么？" class="headerlink" title="三、卷积解决了什么，又没解决什么？"></a>三、卷积解决了什么，又没解决什么？</h2><p>理解一个经典模块，最重要的不只是知道它“强”，还要知道它的边界在哪里。</p>
+<p>卷积解决了什么？</p>
+<h3 id="1-它解决了局部特征提取问题"><a href="#1-它解决了局部特征提取问题" class="headerlink" title="1. 它解决了局部特征提取问题"></a>1. 它解决了局部特征提取问题</h3><p>这一点是最核心的。<br>图像里最基础的视觉模式，比如边缘、角点、纹理，本来就更适合通过局部扫描来提取。</p>
+<h3 id="2-它解决了参数规模和空间结构兼顾的问题"><a href="#2-它解决了参数规模和空间结构兼顾的问题" class="headerlink" title="2. 它解决了参数规模和空间结构兼顾的问题"></a>2. 它解决了参数规模和空间结构兼顾的问题</h3><p>相比全连接，卷积让模型在不破坏图像结构的前提下，仍然保持较高计算效率。</p>
+<h3 id="3-它解决了视觉任务中的一部分不变性问题"><a href="#3-它解决了视觉任务中的一部分不变性问题" class="headerlink" title="3. 它解决了视觉任务中的一部分不变性问题"></a>3. 它解决了视觉任务中的一部分不变性问题</h3><p>比如某些模式出现在图像不同位置时，卷积都能较自然地响应。</p>
+<p>但卷积也有明显局限。</p>
+<h3 id="4-它天然更偏局部，长距离关系建模不直接"><a href="#4-它天然更偏局部，长距离关系建模不直接" class="headerlink" title="4. 它天然更偏局部，长距离关系建模不直接"></a>4. 它天然更偏局部，长距离关系建模不直接</h3><p>如果两个区域相距很远，卷积要靠很多层叠加才能让它们间接建立联系。<br>这不是说做不到，而是路径比较长、效率比较低。</p>
+<h3 id="5-它对“该关注什么”没有显式动态选择能力"><a href="#5-它对“该关注什么”没有显式动态选择能力" class="headerlink" title="5. 它对“该关注什么”没有显式动态选择能力"></a>5. 它对“该关注什么”没有显式动态选择能力</h3><p>标准卷积是固定权重、固定扫描方式。<br>它不会像 attention 那样动态决定“这里更重要，那里次要”。</p>
+<p>所以卷积非常强，但它更擅长：</p>
+<blockquote>
+<p><strong>稳定地提局部结构，而不是灵活地做全局关系建模和动态信息分配。</strong></p>
+</blockquote>
+<p>也正因为如此，后面才会有越来越多补足这些短板的设计。</p>
+<h2 id="四、为什么网络变深之后，ResNet-会变得重要？"><a href="#四、为什么网络变深之后，ResNet-会变得重要？" class="headerlink" title="四、为什么网络变深之后，ResNet 会变得重要？"></a>四、为什么网络变深之后，ResNet 会变得重要？</h2><p>卷积网络一开始变强，很大程度上依赖“更深”。<br>因为更深意味着：</p>
+<ul>
+<li>感受野更大</li>
+<li>表达能力更强</li>
+<li>可以逐层构造更复杂的特征</li>
+</ul>
+<p>但问题很快就来了：</p>
+<blockquote>
+<p><strong>网络是不是越深越好？</strong></p>
+</blockquote>
+<p>理论上更深的网络可以表示更复杂的函数，听起来应该更强。<br>可实际训练时，事情没那么简单。</p>
+<h3 id="1-深层网络最大的问题，不是“表达不够”，而是“优化困难”"><a href="#1-深层网络最大的问题，不是“表达不够”，而是“优化困难”" class="headerlink" title="1. 深层网络最大的问题，不是“表达不够”，而是“优化困难”"></a>1. 深层网络最大的问题，不是“表达不够”，而是“优化困难”</h3><p>很多人第一次学 ResNet，会以为它主要是在“增强表达能力”。<br>其实更准确地说，ResNet 首先是在解决<strong>优化问题</strong>。</p>
+<p>因为网络一旦很深，就容易出现：</p>
+<ul>
+<li>梯度消失</li>
+<li>梯度爆炸</li>
+<li>训练不稳定</li>
+<li>前面层的信息越来越难保留</li>
+<li>后面层即使参数更多，也不一定真学得更好</li>
+</ul>
+<p>也就是说，深层网络不是不能强，而是经常<strong>训练不出来那个应有的强度</strong>。</p>
+<p>这才是 ResNet 真正要解决的核心矛盾。</p>
+<h3 id="2-ResNet-的关键，不是“更复杂”，而是“让信息更好走”"><a href="#2-ResNet-的关键，不是“更复杂”，而是“让信息更好走”" class="headerlink" title="2. ResNet 的关键，不是“更复杂”，而是“让信息更好走”"></a>2. ResNet 的关键，不是“更复杂”，而是“让信息更好走”</h3><p>ResNet 最经典的公式是：</p>
+<p>$$<br>y &#x3D; F(x) + x<br>$$<br>看起来很简单，就是在某个变换 (F(x)) 后面，把输入 (x) 直接加回来。</p>
+<p>但这件事的意义非常大。</p>
+<p>它意味着：<br>某一层不必强迫自己完全重写输入，而可以只学习一个“增量修正”。</p>
+<p>换句话说，网络不用每一层都从头创造新表示，而是可以在原有信息基础上慢慢改。</p>
+<p>这个想法非常重要，因为它让网络学起来容易得多。</p>
+<h2 id="五、ResNet-为什么有效？"><a href="#五、ResNet-为什么有效？" class="headerlink" title="五、ResNet 为什么有效？"></a>五、ResNet 为什么有效？</h2><p>ResNet 有效，至少可以从两个层面理解。</p>
+<h3 id="1-它改善了前向信息流"><a href="#1-它改善了前向信息流" class="headerlink" title="1. 它改善了前向信息流"></a>1. 它改善了前向信息流</h3><p>在普通深层网络里，信息必须一层一层往前传。<br>中间如果有些细节被压掉了，后面很可能就回不来了。</p>
+<p>而残差连接提供了一条“旁路”，让原始信息可以更顺畅地穿过很多层。<br>这意味着：</p>
+<ul>
+<li>低层信息不容易完全被覆盖</li>
+<li>深层表示可以更稳定地建立在已有表示之上</li>
+<li>网络不至于层数一深就把早期信息弄丢得太厉害</li>
+</ul>
+<h3 id="2-它改善了反向梯度流"><a href="#2-它改善了反向梯度流" class="headerlink" title="2. 它改善了反向梯度流"></a>2. 它改善了反向梯度流</h3><p>训练时更关键的是梯度怎么传回来。<br>如果梯度在很深的网络里层层衰减，前面很多层就很难有效更新。</p>
+<p>残差连接相当于给梯度也开了一条更顺畅的路径。<br>这大大降低了深层网络训练的难度。</p>
+<p>所以从更本质的角度看，ResNet 之所以重要，不是因为它“花哨”，而是因为它让：</p>
+<blockquote>
+<p><strong>更深的表示学习真正变得可训练。</strong></p>
+</blockquote>
+<h2 id="六、ResNet-到底解决了什么问题？"><a href="#六、ResNet-到底解决了什么问题？" class="headerlink" title="六、ResNet 到底解决了什么问题？"></a>六、ResNet 到底解决了什么问题？</h2><p>如果像前面那样总结：</p>
+<ul>
+<li>卷积解决的是“局部模式怎么高效提”</li>
+<li>那么 ResNet 解决的就是“深层网络里的信息和梯度怎么稳定传”</li>
+</ul>
+<p>这也是为什么后来几乎所有深一点的网络，都会或多或少借鉴残差思想。<br>因为它触及的是一个非常底层的结构问题：</p>
+<blockquote>
+<p><strong>信息不能只被处理，还要能顺畅通过。</strong></p>
+</blockquote>
+<p>所以你以后看很多变体时，可以少纠结名字，多问一个问题：</p>
+<ul>
+<li>这个结构有没有改善信息流？</li>
+<li>它是不是在降低深层优化难度？</li>
+<li>它是不是在避免重要表示被层层重写后丢失？</li>
+</ul>
+<p>如果答案是“是”，那它大概率就在借 ResNet 的核心思想。</p>
+<h2 id="七、ResNet-的局限是什么？"><a href="#七、ResNet-的局限是什么？" class="headerlink" title="七、ResNet 的局限是什么？"></a>七、ResNet 的局限是什么？</h2><p>虽然 ResNet 很重要，但它也不是终点。</p>
+<h3 id="1-它改善了信息流，但不直接解决“看什么更重要”"><a href="#1-它改善了信息流，但不直接解决“看什么更重要”" class="headerlink" title="1. 它改善了信息流，但不直接解决“看什么更重要”"></a>1. 它改善了信息流，但不直接解决“看什么更重要”</h3><p>残差连接主要解决的是“信息能不能顺畅过”，而不是“信息该怎么分配权重”。</p>
+<h3 id="2-它还是以卷积式局部建模为基础"><a href="#2-它还是以卷积式局部建模为基础" class="headerlink" title="2. 它还是以卷积式局部建模为基础"></a>2. 它还是以卷积式局部建模为基础</h3><p>所以它并没有从根本上改变卷积更偏局部的特点。<br>远距离关系仍然要靠层层堆叠去间接建立。</p>
+<h3 id="3-它不直接提供动态全局建模能力"><a href="#3-它不直接提供动态全局建模能力" class="headerlink" title="3. 它不直接提供动态全局建模能力"></a>3. 它不直接提供动态全局建模能力</h3><p>换句话说，ResNet 让网络更容易训练、更深、更稳，但它并没有显式回答：</p>
+<ul>
+<li>图里哪些区域更关键？</li>
+<li>很远的两个区域之间如何快速建立关系？</li>
+<li>不同位置&#x2F;通道的重要性是否应该动态变化？</li>
+</ul>
+<p>这些问题，就把我们自然引向 attention。</p>
+<h2 id="八、为什么-attention-会越来越重要？"><a href="#八、为什么-attention-会越来越重要？" class="headerlink" title="八、为什么 attention 会越来越重要？"></a>八、为什么 attention 会越来越重要？</h2><p>在卷积和 ResNet 都已经很强之后，CV 研究还在不断往前走。<br>这时候一个越来越突出的现实是：</p>
+<blockquote>
+<p><strong>不是所有信息都同样重要，也不是所有依赖关系都只发生在局部。</strong></p>
+</blockquote>
+<p>这其实对应了两个新问题。</p>
+<h3 id="问题1：信息应该被一视同仁吗？"><a href="#问题1：信息应该被一视同仁吗？" class="headerlink" title="问题1：信息应该被一视同仁吗？"></a>问题1：信息应该被一视同仁吗？</h3><p>一张图里，显然不是所有区域都同等重要。</p>
+<p>比如：</p>
+<ul>
+<li>目标区域比大面积背景更关键</li>
+<li>目标边界比纯背景区域更关键</li>
+<li>某些通道可能承载更有效的语义</li>
+<li>某些局部结构对分类&#x2F;检测决策影响更大</li>
+</ul>
+<p>如果模型对这些信息全部平均处理，往往不够高效，也不够准确。</p>
+<h3 id="问题2：远距离关系怎么建？"><a href="#问题2：远距离关系怎么建？" class="headerlink" title="问题2：远距离关系怎么建？"></a>问题2：远距离关系怎么建？</h3><p>有时候，一个区域是否重要，不只取决于它自己，还取决于别的区域。</p>
+<p>比如：</p>
+<ul>
+<li>一个局部纹理是不是目标，要结合上下文判断</li>
+<li>一个小区域是否属于前景，要看周围结构</li>
+<li>某些模式需要和远处另一个区域共同解释才有意义</li>
+</ul>
+<p>而这些关系，标准卷积做起来并不直接。<br>它不是做不到，而是路径长、耦合弱、效率不高。</p>
+<p>于是 attention 的价值就越来越明显。</p>
+<h2 id="九、attention-的本质到底是什么？"><a href="#九、attention-的本质到底是什么？" class="headerlink" title="九、attention 的本质到底是什么？"></a>九、attention 的本质到底是什么？</h2><p>很多人会说，attention 就是“让模型关注重点”。<br>这句话没错，但还可以再精确一点。</p>
+<p>我更喜欢这样理解：</p>
+<blockquote>
+<p><strong>attention 的本质，是一种动态的信息加权与选择机制。</strong></p>
+</blockquote>
+<p>它做的核心事情不是“凭空创造新信息”，而是：</p>
+<ul>
+<li>评估不同信息之间的相关性</li>
+<li>根据相关性给不同部分分配不同权重</li>
+<li>再把这些信息按权重聚合起来</li>
+</ul>
+<p>写成非常抽象的形式，就是：</p>
+<p>$$<br>\text{output}&#x3D;\sum_i \alpha_i v_i<br>$$<br>这里的 $\alpha_i$ 表示权重，$v_i$ 表示被加权的信息。<br>重点在于：这个权重不是固定写死的，而是<strong>动态算出来的</strong>。</p>
+<p>所以 attention 和普通卷积很大的不同在于：</p>
+<ul>
+<li>卷积更像固定模板扫描</li>
+<li>attention 更像根据当前输入动态决定“该看谁、看多少”</li>
+</ul>
+<h2 id="十、attention-为什么会有效？"><a href="#十、attention-为什么会有效？" class="headerlink" title="十、attention 为什么会有效？"></a>十、attention 为什么会有效？</h2><p>attention 有效，最核心的原因其实有两个。</p>
+<h3 id="1-它能做动态权重分配"><a href="#1-它能做动态权重分配" class="headerlink" title="1. 它能做动态权重分配"></a>1. 它能做动态权重分配</h3><p>不是每张图、每个区域、每个通道的重要性都一样。<br>attention 允许模型根据当前输入自己决定：</p>
+<ul>
+<li>哪个位置更值得看</li>
+<li>哪个通道更关键</li>
+<li>哪些特征应该被加强</li>
+<li>哪些信息应该被抑制</li>
+</ul>
+<p>这使得模型处理信息的方式更灵活。</p>
+<h3 id="2-它能更直接地建立长距离依赖"><a href="#2-它能更直接地建立长距离依赖" class="headerlink" title="2. 它能更直接地建立长距离依赖"></a>2. 它能更直接地建立长距离依赖</h3><p>特别是在 self-attention 里，一个位置和另一个位置之间的关系可以直接建模，而不一定非要靠很多层局部卷积间接传播。</p>
+<p>这让模型更容易整合全局上下文。<br>在很多任务里，这一点非常重要。</p>
+<p>所以可以说，attention 补上的，是卷积和残差网络长期存在的一块短板：</p>
+<blockquote>
+<p><strong>动态选择信息 + 更直接地建模全局关系。</strong></p>
+</blockquote>
+<h2 id="十一、attention-解决了什么，又没解决什么？"><a href="#十一、attention-解决了什么，又没解决什么？" class="headerlink" title="十一、attention 解决了什么，又没解决什么？"></a>十一、attention 解决了什么，又没解决什么？</h2><p>理解 attention 也要讲边界。</p>
+<h3 id="它解决了什么？"><a href="#它解决了什么？" class="headerlink" title="它解决了什么？"></a>它解决了什么？</h3><p>（1）<strong>信息权重不均的问题</strong></p>
+<p>它让模型不必平均对待所有信息。</p>
+<p>（2）<strong>远距离依赖建模的问题</strong></p>
+<p>它让全局关系更容易显式建立。</p>
+<p>（3）<strong>上下文整合的问题</strong></p>
+<p>某个局部到底重要不重要，可以借助全局语境判断。</p>
+<h3 id="它没解决什么？"><a href="#它没解决什么？" class="headerlink" title="它没解决什么？"></a>它没解决什么？</h3><p>（1）<strong>它不天然比卷积更适合局部细节</strong></p>
+<p>卷积对边缘、纹理、局部结构依然非常强。<br>attention 并不天然替代这部分优势。</p>
+<p>（2）<strong>它通常更贵</strong></p>
+<p>尤其标准 self-attention 在高分辨率视觉任务里，计算和显存代价很高。</p>
+<p>（3）<strong>它也不是“加了就一定涨”</strong></p>
+<p>如果任务本身主要瓶颈不是全局关系，或者数据量、训练策略跟不上，attention 并不一定稳稳赢。</p>
+<p>所以 attention 强，但不是万灵药。<br>它的优势最能体现在：</p>
+<ul>
+<li>需要上下文建模</li>
+<li>需要动态聚焦</li>
+<li>需要跨区域整合信息</li>
+</ul>
+<p>的场景里。</p>
+<h2 id="十二、把三者放在一起看，就更清楚了"><a href="#十二、把三者放在一起看，就更清楚了" class="headerlink" title="十二、把三者放在一起看，就更清楚了"></a>十二、把三者放在一起看，就更清楚了</h2><p>到这里，你其实可以把它们三者摆成一个很清楚的分工图：</p>
+<h3 id="卷积"><a href="#卷积" class="headerlink" title="卷积"></a>卷积</h3><p>负责：<strong>高效提取局部模式</strong></p>
+<p>它最擅长：</p>
+<ul>
+<li>边缘</li>
+<li>纹理</li>
+<li>局部结构</li>
+<li>低层到中层视觉特征</li>
+</ul>
+<h3 id="ResNet"><a href="#ResNet" class="headerlink" title="ResNet"></a>ResNet</h3><p>负责：<strong>让深层网络的信息和梯度更顺畅地流动</strong></p>
+<p>它最擅长：</p>
+<ul>
+<li>稳定训练更深网络</li>
+<li>保持表示连续性</li>
+<li>改善前向与反向路径</li>
+</ul>
+<h3 id="Attention"><a href="#Attention" class="headerlink" title="Attention"></a>Attention</h3><p>负责：<strong>动态分配信息权重，并更直接建模长距离关系</strong></p>
+<p>它最擅长：</p>
+<ul>
+<li>重点区域增强</li>
+<li>全局上下文建模</li>
+<li>通道&#x2F;空间动态重加权</li>
+</ul>
+<hr>
+<p>所以这三者不是谁彻底取代谁，而更像是现代视觉模型里的三种核心能力：</p>
+<ol>
+<li><strong>局部建模能力</strong></li>
+<li><strong>稳定信息流能力</strong></li>
+<li><strong>动态全局建模能力</strong></li>
+</ol>
+<p>真正强的模型，往往不是单押某一种，而是把这几种能力组合得比较好。</p>
+<h2 id="十三、为什么现代CV模型越来越喜欢“卷积-残差-attention”？"><a href="#十三、为什么现代CV模型越来越喜欢“卷积-残差-attention”？" class="headerlink" title="十三、为什么现代CV模型越来越喜欢“卷积 + 残差 + attention”？"></a>十三、为什么现代CV模型越来越喜欢“卷积 + 残差 + attention”？</h2><p>你现在再看很多模型，会发现一个非常常见的现象：</p>
+<blockquote>
+<p>backbone 里有卷积，<br>基本块里有残差，<br>某些位置再插入 attention 或类似加权模块。</p>
+</blockquote>
+<p>这不是巧合，而是因为这三者确实分别对应了视觉建模中的三类长期需求：</p>
+<ul>
+<li>图像一定需要局部模式提取</li>
+<li>深层网络一定需要稳定训练和稳定信息流</li>
+<li>复杂任务一定会受益于更智能的信息选择和上下文整合</li>
+</ul>
+<p>所以现代模型经常不是“换掉卷积”，而是：</p>
+<ul>
+<li>用卷积保局部</li>
+<li>用残差保可训练性</li>
+<li>用 attention 补动态关系和全局感知</li>
+</ul>
+<p>这样组合起来更合理。</p>
+<h2 id="十四、从“问题”而不是“名词”去理解它们，才最有用"><a href="#十四、从“问题”而不是“名词”去理解它们，才最有用" class="headerlink" title="十四、从“问题”而不是“名词”去理解它们，才最有用"></a>十四、从“问题”而不是“名词”去理解它们，才最有用</h2><p>我越来越觉得，学这些经典模块时，最怕的是只记结论：</p>
+<ul>
+<li>卷积好</li>
+<li>ResNet 强</li>
+<li>attention 火</li>
+</ul>
+<p>这样很容易停留在名词层面。</p>
+<p>真正有用的理解方式，是始终追问：</p>
+<h3 id="对卷积："><a href="#对卷积：" class="headerlink" title="对卷积："></a>对卷积：</h3><ul>
+<li>为什么图像适合局部扫描？</li>
+<li>卷积的强归纳偏置到底带来了什么？</li>
+<li>它的局部优势会不会变成全局建模短板？</li>
+</ul>
+<h3 id="对-ResNet："><a href="#对-ResNet：" class="headerlink" title="对 ResNet："></a>对 ResNet：</h3><ul>
+<li>深层网络难训练到底难在哪？</li>
+<li>shortcut 为什么能改善优化？</li>
+<li>它是在增强表达，还是在让表达更容易学出来？</li>
+</ul>
+<h3 id="对-attention："><a href="#对-attention：" class="headerlink" title="对 attention："></a>对 attention：</h3><ul>
+<li>它是在补哪种信息处理短板？</li>
+<li>为什么“动态权重分配”比固定卷积更灵活？</li>
+<li>它什么时候真正有价值，什么时候只是增加开销？</li>
+</ul>
+<p>当你这么问时，这些模块就不再只是“知识点”，而会变成你以后看论文、改模型时的分析工具。</p>
+<h2 id="十五、对CV学生来说，最应该真正记住的是什么？"><a href="#十五、对CV学生来说，最应该真正记住的是什么？" class="headerlink" title="十五、对CV学生来说，最应该真正记住的是什么？"></a>十五、对CV学生来说，最应该真正记住的是什么？</h2><p>如果让我把整篇文章最后压缩成三句话，我会这样写：</p>
+<blockquote>
+<p><strong>卷积让模型会看局部。</strong><br><strong>ResNet 让深层网络能学得动。</strong><br><strong>Attention 让模型知道该重点看什么，并能看得更远。</strong></p>
+</blockquote>
+<p>这三件事，恰好对应了视觉模型里最基础的三种能力。</p>
+<p>所以以后你再看一个新模型时，不妨先问它：</p>
+<ul>
+<li>它的局部建模是靠什么完成的？</li>
+<li>它的信息流和梯度流是怎么保证的？</li>
+<li>它有没有动态建模重点信息和全局关系的能力？</li>
+</ul>
+<p>你一旦开始这样看，很多复杂结构都会变得没那么乱。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>卷积、ResNet、Attention 之所以会成为经典，不是因为它们只是“历史上很火的模块”，而是因为它们分别抓住了视觉建模里三个非常根本的问题：</p>
+<ul>
+<li>如何提局部特征</li>
+<li>如何让深层网络可训练</li>
+<li>如何动态建模重要信息与全局关系</li>
+</ul>
+<p>所以真正理解它们，不应该停留在“它们是什么”，而要继续问：</p>
+<blockquote>
+<p><strong>它们为什么会存在？又分别填补了什么结构空缺？</strong></p>
+</blockquote>
+<p>当你开始从这个角度去看模型时，后面遇到各种卷积变体、残差单元、通道注意力、空间注意力、自注意力、混合架构时，就会更容易抓住本质，而不是被名字牵着走。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87/" class="category-chain-item">论文</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？</div>
+      <div>http://example.com/2026/03/16/从会用模型到理解CV3/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alaskaboo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月16日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年3月15日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/17/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV4/" title="【从会用模型到理解CV4】现代 CV 框架到底在优化什么？从 CNN 到 Transformer，再到多尺度融合">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【从会用模型到理解CV4】现代 CV 框架到底在优化什么？从 CNN 到 Transformer，再到多尺度融合</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/15/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV2/" title="【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？">
+                        <span class="hidden-mobile">【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liWXOySWQAe0OVjq","clientSecret":"5fb2935947fe65c42f0f5f3f2236c02901650f02","repo":"gittalk-comments","owner":"Alaskaboo","admin":["Alaskaboo"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '3cbd5beb388be0b7dab9654d09562a13'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://www.cnblogs.com/Alaskaboo" target="_blank" rel="nofollow noopener"><span>Alaskaboo</span></a> <i class="iconfont icon-love"></i> <a href="" target="_blank" rel="nofollow noopener"><span>以玖</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      渝ICP备2025063032号-2
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=50023102500775"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>渝公网安备50023102500775号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

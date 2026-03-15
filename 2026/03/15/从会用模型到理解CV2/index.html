@@ -1,0 +1,1103 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alaskaboo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="上一篇我聊的是一个更底层的问题：深度学习的本质是什么。如果把那个问题再往前推一步，计算机视觉里其实还有一个更具体、也更值得反复想清楚的问题：  一张图进入CV模型后，内部到底发生了什么？  很多时候，我们看模型图会看到很多熟悉的词：  backbone stage neck head skip connection FPN attention fusion  但如果不把这些词放回“图像信息是怎么被">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？">
+<meta property="og:url" content="http://example.com/2026/03/15/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV2/index.html">
+<meta property="og:site_name" content="Alaskaboo&#39;s Blog">
+<meta property="og:description" content="上一篇我聊的是一个更底层的问题：深度学习的本质是什么。如果把那个问题再往前推一步，计算机视觉里其实还有一个更具体、也更值得反复想清楚的问题：  一张图进入CV模型后，内部到底发生了什么？  很多时候，我们看模型图会看到很多熟悉的词：  backbone stage neck head skip connection FPN attention fusion  但如果不把这些词放回“图像信息是怎么被">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260315150522012.png">
+<meta property="article:published_time" content="2026-03-15T06:20:11.000Z">
+<meta property="article:modified_time" content="2026-03-15T07:05:37.876Z">
+<meta property="article:author" content="Alaskaboo">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260315150522012.png">
+  
+  
+  
+  <title>【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？ - Alaskaboo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"akJv1KA0MwGLTy6JWX7w0dA4-gzGzoHsz","app_key":"tLxfRjWzNlEaAQyKovK194Yt","server_url":"https://akjv1ka0.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alaskaboo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-15 14:20" pubdate>
+          2026年3月15日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>上一篇我聊的是一个更底层的问题：<strong>深度学习的本质是什么</strong>。<br>如果把那个问题再往前推一步，计算机视觉里其实还有一个更具体、也更值得反复想清楚的问题：</p>
+<blockquote>
+<p><strong>一张图进入CV模型后，内部到底发生了什么？</strong></p>
+</blockquote>
+<p>很多时候，我们看模型图会看到很多熟悉的词：</p>
+<ul>
+<li>backbone</li>
+<li>stage</li>
+<li>neck</li>
+<li>head</li>
+<li>skip connection</li>
+<li>FPN</li>
+<li>attention</li>
+<li>fusion</li>
+</ul>
+<p>但如果不把这些词放回“图像信息是怎么被处理的”这个视角里看，它们就很容易变成一堆零散的模块名。</p>
+<p>我现在越来越觉得，理解 CV 模型最重要的一步，不是先去背结构图，而是先看懂：</p>
+<blockquote>
+<p><strong>图像信息在网络里是怎么被提取、压缩、传递、融合，再变成输出的。</strong></p>
+</blockquote>
+<p>这篇文章，我就想专门聊这件事。</p>
+<h2 id="一、CV模型处理的，从来不只是“图片”，而是图片里的信息"><a href="#一、CV模型处理的，从来不只是“图片”，而是图片里的信息" class="headerlink" title="一、CV模型处理的，从来不只是“图片”，而是图片里的信息"></a>一、CV模型处理的，从来不只是“图片”，而是图片里的信息</h2><p>一张图像表面上看只是像素矩阵，但对模型来说，它真正要处理的不是“像素本身”，而是像素中包含的各种信息，比如：</p>
+<ul>
+<li>边缘</li>
+<li>纹理</li>
+<li>对比度变化</li>
+<li>局部结构</li>
+<li>物体轮廓</li>
+<li>空间位置</li>
+<li>上下文关系</li>
+<li>语义类别线索</li>
+</ul>
+<p>所以从更本质的角度说，CV 模型其实一直在做一件事：</p>
+<blockquote>
+<p>📌<strong>把原始像素中的有效信息逐步筛出来、组织起来，并变成对任务有用的表示。</strong></p>
+</blockquote>
+<p>这里最关键的一点是：<br>图像里的信息并不是天然整整齐齐摆在那里的。它往往是混在一起的，甚至有很多噪声和冗余。</p>
+<p>于是模型必须回答几个问题：</p>
+<ul>
+<li>哪些信息该保留？</li>
+<li>哪些信息可以压缩？</li>
+<li>哪些信息需要增强？</li>
+<li>哪些信息在后面不能丢？</li>
+<li>哪些层之间需要重新建立联系？</li>
+</ul>
+<p>这其实就是后面所有结构设计的源头。</p>
+<h2 id="二、图像特征为什么天然是分层的？"><a href="#二、图像特征为什么天然是分层的？" class="headerlink" title="二、图像特征为什么天然是分层的？"></a>二、图像特征为什么天然是分层的？</h2><p>CV 模型和很多其他任务不一样，一个很重要的原因在于：<strong>图像信息天然具有层次性。</strong></p>
+<p>可以把它理解成这样。</p>
+<p>一张图最开始只是像素。<br>但模型不会直接从“像素”跳到“目标类别”或者“边框位置”，而是会经历很多层中间状态。</p>
+<p>通常来说，图像特征大致会表现出这样的层次：</p>
+<h3 id="1-浅层特征：细节多，但语义弱"><a href="#1-浅层特征：细节多，但语义弱" class="headerlink" title="1. 浅层特征：细节多，但语义弱"></a>1. 浅层特征：细节多，但语义弱</h3><p>在网络前几层，模型更容易感受到的是一些局部变化，比如：</p>
+<ul>
+<li>边缘</li>
+<li>角点</li>
+<li>纹理</li>
+<li>局部亮暗差异</li>
+<li>简单颜色模式</li>
+</ul>
+<p>这些特征离原始图像很近，所以保留了大量细节。<br>但问题也很明显：它们通常还不能直接代表“这是车”“这是人”“这是晶体”。</p>
+<p>也就是说，<strong>浅层特征看得细，但看不懂</strong></p>
+<h3 id="2-中层特征：开始形成局部结构"><a href="#2-中层特征：开始形成局部结构" class="headerlink" title="2. 中层特征：开始形成局部结构"></a>2. 中层特征：开始形成局部结构</h3><p>随着网络加深，模型会逐渐把这些边缘和纹理组合起来，形成更稳定的局部模式，比如：</p>
+<ul>
+<li>局部轮廓</li>
+<li>部件形状</li>
+<li>纹理片段组合</li>
+<li>更有判别力的小区域结构</li>
+</ul>
+<p>这一层的特征通常开始变得“有点像东西了”，但还没有完全走到高层语义。</p>
+<h3 id="3-深层特征：语义强，但细节容易丢"><a href="#3-深层特征：语义强，但细节容易丢" class="headerlink" title="3. 深层特征：语义强，但细节容易丢"></a>3. 深层特征：语义强，但细节容易丢</h3><p>到更深的层，模型已经不再主要关心原始纹理，而更关心：</p>
+<ul>
+<li>这是不是某个目标</li>
+<li>这个区域大概属于哪一类</li>
+<li>它和周围区域的关系是什么</li>
+<li>场景的整体语义是什么</li>
+</ul>
+<p>这时候，特征图的语义更强了，但很多细节已经被压缩甚至丢掉了。</p>
+<p>所以深层特征的特点是：<strong>看得懂，但不一定看得细。</strong></p>
+<h2 id="三、为什么浅层和深层特征谁都不能少？"><a href="#三、为什么浅层和深层特征谁都不能少？" class="headerlink" title="三、为什么浅层和深层特征谁都不能少？"></a>三、为什么浅层和深层特征谁都不能少？</h2><p>很多初学者容易默认：<br>“既然深层特征更高级，那直接用最后一层不就行了吗？”</p>
+<p>分类任务里，这样想有时问题不大。<br>但到了检测、分割、关键点、小目标这些任务里，这个想法通常不成立。</p>
+<p>因为视觉任务并不只需要“知道是什么”，还经常需要：</p>
+<ul>
+<li>知道在哪里</li>
+<li>知道边界多精细</li>
+<li>知道局部结构是否完整</li>
+<li>知道小区域是否存在关键线索</li>
+</ul>
+<p>而这些恰恰是浅层特征更擅长保留的东西。</p>
+<p>所以可以把浅层和深层理解成两种不同能力：</p>
+<ul>
+<li><strong>浅层特征负责细节</strong></li>
+<li><strong>深层特征负责语义</strong></li>
+</ul>
+<p>真正有效的 CV 模型，往往不是只追求更深，而是要解决一个持续存在的矛盾：</p>
+<blockquote>
+<p><strong>如何同时拿到足够强的语义信息，又不把关键细节丢掉。</strong></p>
+</blockquote>
+<p>这几乎是后面很多结构设计的共同出发点。</p>
+<h2 id="四、为什么分类、检测、分割对特征的要求不一样？"><a href="#四、为什么分类、检测、分割对特征的要求不一样？" class="headerlink" title="四、为什么分类、检测、分割对特征的要求不一样？"></a>四、为什么分类、检测、分割对特征的要求不一样？</h2><p>要理解信息流为什么重要，一个很好的切入点就是比较不同视觉任务。</p>
+<h3 id="1-分类任务"><a href="#1-分类任务" class="headerlink" title="1. 分类任务"></a>1. 分类任务</h3><p>分类更关心整张图“是什么”。<br>所以它最需要的是<strong>全局语义判别能力</strong>。</p>
+<p>很多时候，只要最后几层特征足够有区分度，分类就能做得不错。<br>这也是为什么经典分类网络经常在最后做全局池化，然后接一个分类头。</p>
+<h3 id="2-检测任务"><a href="#2-检测任务" class="headerlink" title="2. 检测任务"></a>2. 检测任务</h3><p>检测不仅要判断类别，还要判断位置。<br>这意味着模型不能只保留语义，还必须保留一定的空间信息。</p>
+<p>尤其当图中目标大小差异很大时，模型还要同时处理：</p>
+<ul>
+<li>大目标的整体语义</li>
+<li>小目标的局部细节</li>
+<li>多个目标之间的空间分布</li>
+</ul>
+<p>所以检测任务天然比分类更依赖多层次特征。</p>
+<h3 id="3-分割任务"><a href="#3-分割任务" class="headerlink" title="3. 分割任务"></a>3. 分割任务</h3><p>分割要求更高，因为它需要做到像素级预测。<br>也就是说，不仅要认得出是什么，还要知道精确到边界的区域在哪里。</p>
+<p>这使得分割任务对浅层细节、空间定位和特征融合的依赖更强。</p>
+<h3 id="4-小目标任务"><a href="#4-小目标任务" class="headerlink" title="4. 小目标任务"></a>4. 小目标任务</h3><p>小目标尤其敏感。<br>因为目标本身像素少，如果前面几次下采样后信息被抹掉了，后面再强的语义也补不回来。</p>
+<p>所以小目标检测的困难，本质上不是“模型不够复杂”，而是：</p>
+<ul>
+<li>原始信息本来就少</li>
+<li>细节特别容易丢</li>
+<li>背景干扰比例更高</li>
+<li>定位误差更敏感</li>
+</ul>
+<p>这就是为什么很多模型看起来只是“加了个融合层”或者“改了个分支”，但对小目标却很关键。</p>
+<h2 id="五、图像进入网络后，信息到底经历了什么？"><a href="#五、图像进入网络后，信息到底经历了什么？" class="headerlink" title="五、图像进入网络后，信息到底经历了什么？"></a>五、图像进入网络后，信息到底经历了什么？</h2><p>如果把一张图送进一个典型的 CV 模型，它内部的信息大致会经历几种变化。</p>
+<h3 id="1-分辨率变化"><a href="#1-分辨率变化" class="headerlink" title="1. 分辨率变化"></a>1. 分辨率变化</h3><p>网络往往会不断下采样。<br>这会带来两个效果：</p>
+<ul>
+<li>好处：扩大感受野、降低计算量、让模型看到更大范围的上下文</li>
+<li>代价：细节丢失、空间定位变粗、小目标更容易消失</li>
+</ul>
+<p>所以每一次下采样，本质上都是一次权衡。</p>
+<h3 id="2-通道变化"><a href="#2-通道变化" class="headerlink" title="2. 通道变化"></a>2. 通道变化</h3><p>随着层数加深，特征图的通道数常常会变多。<br>这不是为了“看起来复杂”，而是为了让模型有能力编码更多不同类型的信息模式。</p>
+<p>可以把它粗略理解成：<br>分辨率在下降，但语义表达的维度在增加。</p>
+<h3 id="3-表示变化"><a href="#3-表示变化" class="headerlink" title="3. 表示变化"></a>3. 表示变化</h3><p>前面层更多保留局部视觉模式，后面层更多保留抽象语义。<br>也就是说，信息并不是简单“变少了”，而是在被重新组织。</p>
+<h3 id="4-信息选择变化"><a href="#4-信息选择变化" class="headerlink" title="4. 信息选择变化"></a>4. 信息选择变化</h3><p>随着网络前进，并不是所有信息都会被平等保留。<br>有些模式会被不断强化，有些会被压掉，有些会在融合过程中重新激活。</p>
+<p>所以一个模型到底强不强，不只是看它有没有提特征，还要看：</p>
+<blockquote>
+<p><strong>它在信息经过这么多层之后，还保住了什么，又丢掉了什么。</strong></p>
+</blockquote>
+<h2 id="六、什么叫“信息流”？"><a href="#六、什么叫“信息流”？" class="headerlink" title="六、什么叫“信息流”？"></a>六、什么叫“信息流”？</h2><p>说到这里，就能更自然地理解“信息流”这个词了。</p>
+<p>所谓信息流，不是某种神秘概念，它其实就是：</p>
+<blockquote>
+<p><strong>图像中的信息在网络中如何被传递、变换、压缩、重组和利用。</strong></p>
+</blockquote>
+<p>这个概念为什么重要？<br>因为很多结构改进，表面上看是在“加模块”，本质上其实都在改信息怎么走。</p>
+<p>换句话说，CV 模型的很多问题，最后都可以转化成信息流问题：</p>
+<ul>
+<li>信息是不是太早丢了？</li>
+<li>不同层的信息能不能碰到一起？</li>
+<li>高层语义能不能回到低层细节上？</li>
+<li>小目标信息有没有被下采样直接抹掉？</li>
+<li>梯度能不能顺畅地反向传回来？</li>
+<li>不同尺度的目标，有没有对应的有效表示路径？</li>
+</ul>
+<p>所以如果只记模块名字，很容易觉得网络结构很碎。<br>但如果从信息流看，就会发现很多结构其实在解决同一类矛盾。</p>
+<h2 id="七、为什么说结构设计，本质上是在设计信息怎么走？"><a href="#七、为什么说结构设计，本质上是在设计信息怎么走？" class="headerlink" title="七、为什么说结构设计，本质上是在设计信息怎么走？"></a>七、为什么说结构设计，本质上是在设计信息怎么走？</h2><p>这一点我现在越来越确定：</p>
+<blockquote>
+<p>📌<strong>一个 CV 模型的结构设计，本质上就是在设计信息流路径。</strong></p>
+</blockquote>
+<p>最简单的网络，信息流是一条直线：</p>
+<p>$$<br>x \rightarrow f_1 \rightarrow f_2 \rightarrow f_3 \rightarrow \cdots \rightarrow y<br>$$<br>这种结构的问题是，信息必须层层往前传。<br>一旦中间某些细节被压没了，后面通常很难再恢复；反过来，梯度往回传时也可能越来越弱。</p>
+<p>于是后来才出现了很多非常经典的设计。</p>
+<h3 id="1-残差连接"><a href="#1-残差连接" class="headerlink" title="1. 残差连接"></a>1. 残差连接</h3><p>它的价值不只是“让网络更深”，更重要的是让信息和梯度有一条更顺畅的旁路。</p>
+<p>这意味着原始表示不必在每一层都被彻底改写，网络可以选择只学习增量变化。</p>
+<h3 id="2-跳跃连接"><a href="#2-跳跃连接" class="headerlink" title="2. 跳跃连接"></a>2. 跳跃连接</h3><p>它让浅层特征能直接和深层特征结合。<br>这件事对检测和分割特别关键，因为浅层有细节，深层有语义。</p>
+<h3 id="3-金字塔与多尺度融合"><a href="#3-金字塔与多尺度融合" class="headerlink" title="3. 金字塔与多尺度融合"></a>3. 金字塔与多尺度融合</h3><p>它解决的是不同尺度目标的信息路径问题。<br>如果只有单尺度表示，大目标和小目标就很难同时处理好。</p>
+<h3 id="4-Attention"><a href="#4-Attention" class="headerlink" title="4. Attention"></a>4. Attention</h3><p>它改变的是信息分配方式。<br>不是简单让信息通过，而是动态决定“哪些信息应该被看得更重”。</p>
+<p>所以以后再看一个新模块，别只问它叫什么，而是先问：</p>
+<ul>
+<li>它改了哪条信息流？</li>
+<li>它补救了哪种信息损失？</li>
+<li>它加强了哪种信息交互？</li>
+<li>它的代价是什么？</li>
+</ul>
+<p>只要这么问，很多结构会瞬间清楚很多。</p>
+<h2 id="八、下采样为什么既必要又危险？"><a href="#八、下采样为什么既必要又危险？" class="headerlink" title="八、下采样为什么既必要又危险？"></a>八、下采样为什么既必要又危险？</h2><p>CV 模型里有一个特别值得反复琢磨的操作，就是下采样。</p>
+<p>它几乎无处不在，但也几乎是很多问题的源头。</p>
+<h3 id="为什么必要？"><a href="#为什么必要？" class="headerlink" title="为什么必要？"></a>为什么必要？</h3><p>因为如果一直保持原图分辨率，计算量会非常大。<br>而且模型也很难快速获得更大范围的上下文。</p>
+<p>👉所以下采样带来的收益包括：</p>
+<ul>
+<li>感受野扩大</li>
+<li>计算更省</li>
+<li>语义更容易聚合</li>
+<li>更适合高层抽象</li>
+</ul>
+<h3 id="为什么危险？"><a href="#为什么危险？" class="headerlink" title="为什么危险？"></a>为什么危险？</h3><p>因为一旦下采样过猛，很多信息就真的回不来了，尤其是：</p>
+<ul>
+<li>边缘细节</li>
+<li>精确位置</li>
+<li>小目标结构</li>
+<li>弱纹理区域</li>
+</ul>
+<p>所以很多视觉模型其实都在围绕一个核心矛盾做平衡：</p>
+<blockquote>
+<p><strong>既想要更大感受野和更强语义，又不想过早丢掉细节。</strong></p>
+</blockquote>
+<p>可以发现，很多后续设计，比如高分辨率分支、FPN、特征融合、轻量局部注意力，本质上都和这个矛盾有关。</p>
+<h2 id="九、为什么多尺度融合会长期重要？"><a href="#九、为什么多尺度融合会长期重要？" class="headerlink" title="九、为什么多尺度融合会长期重要？"></a>九、为什么多尺度融合会长期重要？</h2><p>如果图像里的目标大小都差不多，那模型设计会简单很多。<br>但现实任务里，目标尺度变化几乎不可避免。</p>
+<p>比如同一张图里可能同时存在：</p>
+<ul>
+<li>很大的前景目标</li>
+<li>很小的远处目标</li>
+<li>局部细节目标</li>
+<li>大范围上下文线索</li>
+</ul>
+<p>单一尺度的特征通常很难同时兼顾这些需求。</p>
+<p>所以多尺度融合长期有效，不是因为“大家都这么做”，而是因为它确实对应了一个真实问题：</p>
+<blockquote>
+<p><strong>不同大小的目标，需要不同分辨率和不同语义层次的表示。</strong></p>
+</blockquote>
+<p>这也是为什么 FPN、PAN、BiFPN、U-Net 风格的 skip-fusion，会在很多任务里反复出现。</p>
+<p>本质上，它们都在做同一件事：</p>
+<ul>
+<li>把高层语义往下传</li>
+<li>把低层细节往上带</li>
+<li>让不同尺度的信息能在合适位置汇合</li>
+</ul>
+<p>所以多尺度不是技巧，而是视觉任务里非常基本的需求。</p>
+<h2 id="十、为什么很多结构创新，本质上不是“提特征”，而是“救信息”？"><a href="#十、为什么很多结构创新，本质上不是“提特征”，而是“救信息”？" class="headerlink" title="十、为什么很多结构创新，本质上不是“提特征”，而是“救信息”？"></a>十、为什么很多结构创新，本质上不是“提特征”，而是“救信息”？</h2><p>这一点非常值得单独说。</p>
+<p>很多时候我们看论文，作者会说自己的模块“增强特征提取能力”。<br>这句话当然常常没错，但如果再往深里看，很多改进其实并不是单纯“提得更强”，而是：</p>
+<blockquote>
+<p>👉<strong>把本来容易丢掉、走不通、对不上、用不上的信息重新救回来。</strong></p>
+</blockquote>
+<p>比如：</p>
+<ul>
+<li>残差是在救梯度和原始表示</li>
+<li>跳连是在救浅层细节</li>
+<li>FPN 是在救多尺度信息</li>
+<li>注意力是在救被均匀处理而本应被强调的关键区域</li>
+<li>高分辨率分支是在救被下采样抹掉的小结构</li>
+</ul>
+<p>所以以后看一个结构，不妨多想一步：</p>
+<p>它到底是在“生成新信息”，还是在“更好地保住和调动已有信息”？</p>
+<p>很多时候，后者更接近事实。</p>
+<h2 id="十一、从这个角度再看-backbone、neck、head，会更清楚"><a href="#十一、从这个角度再看-backbone、neck、head，会更清楚" class="headerlink" title="十一、从这个角度再看 backbone、neck、head，会更清楚"></a>十一、从这个角度再看 backbone、neck、head，会更清楚</h2><p>很多人最开始学检测时，会记住一句话：</p>
+<ul>
+<li>backbone 提特征</li>
+<li>neck 做融合</li>
+<li>head 做预测</li>
+</ul>
+<p>这当然没错，但还是有点太平。</p>
+<p>如果从信息流角度看，可以理解得更具体一点：</p>
+<h3 id="Backbone"><a href="#Backbone" class="headerlink" title="Backbone"></a>Backbone</h3><p>主要负责把原始图像逐步变成更有层次的表示。<br>它决定了信息最初是怎么被提取和压缩的。</p>
+<h3 id="Neck"><a href="#Neck" class="headerlink" title="Neck"></a>Neck</h3><p>主要负责把不同层次、不同尺度的信息重新组织起来。<br>它决定了哪些信息能重新相遇、重新组合。</p>
+<h3 id="Head"><a href="#Head" class="headerlink" title="Head"></a>Head</h3><p>主要负责把前面得到的表示映射到具体任务输出。<br>它决定了这些信息最后如何被用来做分类、定位、分割等判断。</p>
+<p>这样看以后，backbone、neck、head 就不再只是工程分工，而更像是信息处理链条里的三个阶段。</p>
+<h2 id="十二、对CV学生来说，真正该建立的不是“模块表”，而是“信息流意识”"><a href="#十二、对CV学生来说，真正该建立的不是“模块表”，而是“信息流意识”" class="headerlink" title="十二、对CV学生来说，真正该建立的不是“模块表”，而是“信息流意识”"></a>十二、对CV学生来说，真正该建立的不是“模块表”，而是“信息流意识”</h2><p>很多人学 CV 学得很累或说很轻松，我感觉是因为脑子里装的是一张“模块名单”：</p>
+<ul>
+<li>这个是注意力</li>
+<li>那个是卷积变体</li>
+<li>这个是 neck</li>
+<li>那个是损失函数</li>
+</ul>
+<p>但如果这些东西之间没有被“信息流”串起来，它们就永远只是碎片。</p>
+<p>相反，如果建立起一种更稳定的思考方式：</p>
+<ul>
+<li>这一层在保留什么信息？</li>
+<li>这一层在压掉什么信息？</li>
+<li>哪些信息在前面丢了？</li>
+<li>哪些信息需要被重新融合？</li>
+<li>为什么这个任务特别依赖某种特征路径？</li>
+</ul>
+<p>那再去看任何结构，理解速度都会快很多。</p>
+<p>因为不再只是记“它是什么”，而是在看：</p>
+<blockquote>
+<p><strong>它让信息变得更好了，还是只是让结构变复杂了。</strong></p>
+</blockquote>
+<p>这两者区别非常大。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>如果说上一篇讨论的是“深度学习为什么能学”，那么这一篇我更想回答的是：</p>
+<blockquote>
+<p>📌<strong>在 CV 里，图像信息到底是怎么一步步被处理成可用于任务判断的表示的？</strong></p>
+</blockquote>
+<p>我现在更愿意把视觉模型理解成这样一个系统：</p>
+<ul>
+<li>它从原始像素中提取信息</li>
+<li>它在不同层级中不断压缩和重组信息</li>
+<li>它试图同时平衡细节与语义</li>
+<li>它通过各种结构设计，让重要信息不要太早丢掉，让不同层次的信息能有效汇合</li>
+<li>最终，它把这些表示变成分类、检测、分割等任务输出</li>
+</ul>
+<p>所以对 CV 模型来说，真正重要的从来不只是“用了什么模块”，而是：</p>
+<blockquote>
+<p><strong>图像信息是如何流动的。</strong></p>
+</blockquote>
+<p>当开始从这个角度看模型时，很多结构设计都会从“模块堆叠”变成“问题驱动的解决方案”。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87/" class="category-chain-item">论文</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？</div>
+      <div>http://example.com/2026/03/15/从会用模型到理解CV2/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alaskaboo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月15日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年3月15日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/16/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV3/" title="【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【从会用模型到理解CV3】为什么卷积、ResNet、Attention 会有效？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/14/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV1/" title="【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数">
+                        <span class="hidden-mobile">【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liWXOySWQAe0OVjq","clientSecret":"5fb2935947fe65c42f0f5f3f2236c02901650f02","repo":"gittalk-comments","owner":"Alaskaboo","admin":["Alaskaboo"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '56cf956246f4db2a99b8c89591c78218'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://www.cnblogs.com/Alaskaboo" target="_blank" rel="nofollow noopener"><span>Alaskaboo</span></a> <i class="iconfont icon-love"></i> <a href="" target="_blank" rel="nofollow noopener"><span>以玖</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      渝ICP备2025063032号-2
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=50023102500775"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>渝公网安备50023102500775号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

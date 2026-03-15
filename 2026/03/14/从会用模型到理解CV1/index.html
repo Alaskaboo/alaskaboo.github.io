@@ -1,0 +1,1125 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Alaskaboo">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="很多人刚接触深度学习时，最容易形成两种印象。 一种是把它看得很神秘，觉得它像某种“黑盒魔法”，数据一喂、模型一跑，结果就出来了。另一种是把它看得很工程化，觉得深度学习无非就是调包、堆网络、换模块、刷指标。 但如果真的想往计算机视觉这条路继续走，无论是看论文、做实验，还是以后自己写文章、做研究，有一个问题都绕不过去：  深度学习的本质，到底是什么？  如果这个问题一直模糊，那么后面学 CNN、Res">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数">
+<meta property="og:url" content="http://example.com/2026/03/14/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV1/index.html">
+<meta property="og:site_name" content="Alaskaboo&#39;s Blog">
+<meta property="og:description" content="很多人刚接触深度学习时，最容易形成两种印象。 一种是把它看得很神秘，觉得它像某种“黑盒魔法”，数据一喂、模型一跑，结果就出来了。另一种是把它看得很工程化，觉得深度学习无非就是调包、堆网络、换模块、刷指标。 但如果真的想往计算机视觉这条路继续走，无论是看论文、做实验，还是以后自己写文章、做研究，有一个问题都绕不过去：  深度学习的本质，到底是什么？  如果这个问题一直模糊，那么后面学 CNN、Res">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260315150522012.png">
+<meta property="article:published_time" content="2026-03-14T01:30:51.000Z">
+<meta property="article:modified_time" content="2026-03-15T07:06:12.326Z">
+<meta property="article:author" content="Alaskaboo">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20260315150522012.png">
+  
+  
+  
+  <title>【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数 - Alaskaboo&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":"akJv1KA0MwGLTy6JWX7w0dA4-gzGzoHsz","app_key":"tLxfRjWzNlEaAQyKovK194Yt","server_url":"https://akjv1ka0.lc-cn-n1-shared.com","path":"window.location.pathname","ignore_local":true},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Alaskaboo&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-14 09:30" pubdate>
+          2026年3月14日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="leancloud-page-views"></span> 次
+        </span>
+        
+      
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>很多人刚接触深度学习时，最容易形成两种印象。</p>
+<p>一种是把它看得很神秘，觉得它像某种“黑盒魔法”，数据一喂、模型一跑，结果就出来了。<br>另一种是把它看得很工程化，觉得深度学习无非就是调包、堆网络、换模块、刷指标。</p>
+<p>但如果真的想往计算机视觉这条路继续走，无论是看论文、做实验，还是以后自己写文章、做研究，有一个问题都绕不过去：</p>
+<blockquote>
+<p><strong>深度学习的本质，到底是什么？</strong></p>
+</blockquote>
+<p>如果这个问题一直模糊，那么后面学 CNN、ResNet、Transformer、Attention、损失函数、优化器时，往往都只是”知道名字“，却很难真正理解它们为什么存在、解决了什么问题。</p>
+<p>这篇文章想做的事，就是尽量把这个问题讲清楚。</p>
+<h2 id="一、先说结论：深度学习的本质，是学习一个函数"><a href="#一、先说结论：深度学习的本质，是学习一个函数" class="headerlink" title="一、先说结论：深度学习的本质，是学习一个函数"></a>一、先说结论：深度学习的本质，是学习一个函数</h2><p>如果只用一句话概括，我会这样说：</p>
+<blockquote>
+<p><strong>深度学习的本质，是用一个可学习的复杂函数，去逼近现实任务中的输入到输出映射。</strong></p>
+</blockquote>
+<p>写成数学形式就是：<br>$$<br>y \approx f_\theta(x)<br>$$<br>这里：</p>
+<ul>
+<li>(x) 表示输入，比如图像、文本、语音、传感器信号</li>
+<li>(y) 表示输出，比如类别、边框、分割结果、下一个词</li>
+<li>$(f_\theta)$ 表示一个由参数 $(\theta) $控制的函数</li>
+<li>所谓“学习”，就是通过数据去调整这些参数</li>
+</ul>
+<p>也就是说，深度学习真正做的事情，并不是“模仿大脑”这种宣传语，也不是简单地“记住答案”，而是：</p>
+<blockquote>
+<p><font color='red'><strong>从数据中学出一个合适的映射关系。</strong></font></p>
+</blockquote>
+<p>比如在图像分类里，这个映射是：</p>
+<ul>
+<li>输入一张图</li>
+<li>输出它属于哪一类</li>
+</ul>
+<p>在目标检测里，这个映射是：</p>
+<ul>
+<li>输入一张图</li>
+<li>输出图中目标的位置和类别</li>
+</ul>
+<p>在语音识别里，这个映射是：</p>
+<ul>
+<li>输入一段语音信号</li>
+<li>输出对应文字</li>
+</ul>
+<p>所以不管模型叫什么名字，结构看起来多复杂，本质上都绕不开这件事：</p>
+<blockquote>
+<p>👉<strong>找一个尽可能好的函数，让输入能正确映射到输出。</strong></p>
+</blockquote>
+<h2 id="二、那为什么叫“深度”学习？"><a href="#二、那为什么叫“深度”学习？" class="headerlink" title="二、那为什么叫“深度”学习？"></a>二、那为什么叫“深度”学习？</h2><p>既然本质上是在学函数，那为什么不直接学一个简单函数，而要叫“深度”学习？</p>
+<p>因为现实世界中的很多任务太复杂了，简单函数根本不够表达。</p>
+<p>比如你想根据房屋面积预测房价，一个线性函数可能还能凑合：<br>$$<br>y &#x3D; wx+b<br>$$<br>但如果输入是一张图像，输出却是“这是不是一只猫”“图里有哪些目标”“物体边界在哪里”，这种映射关系就远远不是一条直线能描述的。</p>
+<p>所以深度学习用的不是单层简单函数，而是很多层函数组合起来：<br>$$<br>f(x)&#x3D;f_n(f_{n-1}(\cdots f_2(f_1(x))))<br>$$<br>这意味着模型不会一下子从原始输入跳到最终答案，而是经过一层一层的变换，逐步提炼信息。</p>
+<p>以图像为例，大致可以理解为：</p>
+<ul>
+<li>浅层学到边缘、角点、纹理</li>
+<li>中层学到局部结构、形状片段</li>
+<li>深层学到语义目标、上下文关系</li>
+</ul>
+<p>所以“深度”真正强调的，不只是层数多，而是：</p>
+<ul>
+<li><strong>函数是分层的</strong></li>
+<li><strong>表示是分层的</strong></li>
+<li><strong>抽象过程是分层的</strong></li>
+</ul>
+<p>这也是深度学习比很多传统方法强大的原因之一。它不是直接硬拟合输入输出，而是通过层层变换，让数据表示逐渐变得更适合最终任务。</p>
+<h2 id="三、深度学习不是在“背答案”，而是在学表示"><a href="#三、深度学习不是在“背答案”，而是在学表示" class="headerlink" title="三、深度学习不是在“背答案”，而是在学表示"></a>三、深度学习不是在“背答案”，而是在学表示</h2><p>很多初学者会下意识觉得，深度学习就是给模型看很多样本，然后让它把答案记住。</p>
+<p>这种理解不能说全错，但不够准确。</p>
+<p>更准确的说法是：</p>
+<blockquote>
+<p>👉<strong>深度学习不仅在学“怎么预测”，更在学“怎么表示数据”。</strong></p>
+</blockquote>
+<p>比如一张图像，原始形式只是一个像素矩阵。<br>这些像素本身并不直接等于“猫”“狗”“晶体”“缺陷”或者“人脸”。</p>
+<p>模型之所以能完成任务，是因为它把原始像素逐步变成了更有意义的中间表示：<br>$$<br>x \rightarrow h_1 \rightarrow h_2 \rightarrow h_3 \rightarrow \cdots \rightarrow y<br>$$<br>这里的$ (h_1, h_2, h_3) $就是中间特征。</p>
+<p>从这个角度看，深度学习真正厉害的地方，不只是它能做分类、检测、分割，而是：</p>
+<blockquote>
+<p>👉<strong>它可以自动学习出适合当前任务的特征表示。</strong></p>
+</blockquote>
+<p>这也是为什么深度学习常常被称为 <strong>表示学习（Representation Learning）</strong>。</p>
+<p>传统机器学习很多时候依赖人工设计特征，比如过去做视觉任务常见的 SIFT、HOG、LBP 等，流程通常是：</p>
+<ol>
+<li>人先设计一套特征</li>
+<li>再让模型根据这些特征完成分类或识别</li>
+</ol>
+<p>而深度学习把这两步合到了一起：</p>
+<ol>
+<li>直接输入原始数据</li>
+<li>模型自己学特征</li>
+<li>再自己完成任务映射</li>
+</ol>
+<p>所以从历史角度看，深度学习真正革命性的地方之一，就是：</p>
+<p>👉**<font color='green'>把“特征提取”和“任务求解”统一到了同一个可训练系统中。</font>**</p>
+<h2 id="四、从训练角度看，深度学习本质上是在做优化"><a href="#四、从训练角度看，深度学习本质上是在做优化" class="headerlink" title="四、从训练角度看，深度学习本质上是在做优化"></a>四、从训练角度看，深度学习本质上是在做优化</h2><p>如果再换一个角度，你会发现深度学习还可以理解成一个优化问题。</p>
+<p>假设模型预测是$ f_\theta(x)$，真实答案是 $y$，那么我们需要一个损失函数来衡量预测错了多少：<br>$$<br>\mathcal{L}(f_\theta(x), y)<br>$$<br>训练的目标，就是找到一组参数 (\theta)，让这个损失尽可能小：<br>$$<br>\theta^* &#x3D; \arg\min_\theta \mathcal{L}(f_\theta(x), y)<br>$$<br>所以从训练过程来说，深度学习做的事情其实非常朴素：</p>
+<ul>
+<li>前向传播：算出预测结果</li>
+<li>损失计算：看预测和真值差多少</li>
+<li>反向传播：计算每个参数该怎么改</li>
+<li>梯度下降：沿着让损失变小的方向更新参数</li>
+</ul>
+<p>所以你也可以说：</p>
+<blockquote>
+<p>👉<strong>深度学习的本质，是在高维参数空间里寻找一个能较好拟合数据规律的函数。</strong></p>
+</blockquote>
+<p>这就是为什么我更愿意把深度学习概括成：</p>
+<blockquote>
+<p>👉<strong>函数逼近 + 数值优化。</strong></p>
+</blockquote>
+<p>前者解释“它在干什么”，后者解释“它怎么做到”。</p>
+<h2 id="五、为什么非线性这么关键？"><a href="#五、为什么非线性这么关键？" class="headerlink" title="五、为什么非线性这么关键？"></a>五、为什么非线性这么关键？</h2><p>理解深度学习时，有一个点非常容易被忽略，但它其实很关键，那就是：<strong>非线性</strong>。</p>
+<p>假设一个网络里每一层都只是线性变换，那么即使叠很多层，最后整体上仍然等价于一个线性变换。<br>而现实世界中的大多数任务都不是线性的。</p>
+<p>比如：</p>
+<ul>
+<li>图像分类不是简单线性可分</li>
+<li>目标检测更不是一个直线模型能做好的</li>
+<li>复杂视觉语义关系也不是简单相加减就能得到</li>
+</ul>
+<p>所以深度学习之所以有效，一个重要原因是它在层与层之间加入了非线性激活函数，比如：</p>
+<ul>
+<li>ReLU</li>
+<li>GELU</li>
+<li>Sigmoid</li>
+<li>Tanh</li>
+</ul>
+<p>这些非线性操作让模型具备了表达复杂决策边界和复杂数据结构的能力。</p>
+<p>所以把深度学习再压缩一点，可以写成：</p>
+<blockquote>
+<p>👉<strong>深度学习 &#x3D; 多层线性变换 + 非线性激活 + 可学习参数 + 数据驱动优化。</strong></p>
+</blockquote>
+<p>这句话很简单，但其实已经概括了神经网络工作的核心机制。</p>
+<h2 id="六、为什么深度学习在视觉任务里特别有效？"><a href="#六、为什么深度学习在视觉任务里特别有效？" class="headerlink" title="六、为什么深度学习在视觉任务里特别有效？"></a>六、为什么深度学习在视觉任务里特别有效？</h2><p>深度学习为什么会在计算机视觉里表现得这么强？<br>很重要的一个原因是：<strong>图像本身就具有天然的层次结构和统计规律。</strong></p>
+<p>比如一张图像并不是随机像素堆，而是具有这些特点：</p>
+<ul>
+<li>邻近像素通常相关</li>
+<li>边缘和纹理具有规律性</li>
+<li>物体由局部部件构成</li>
+<li>场景由多个物体和关系组成</li>
+</ul>
+<p>深度网络特别擅长逐层建模这种结构。</p>
+<p>拿最典型的 CNN 来说，它默认认为：</p>
+<ul>
+<li>局部邻域重要</li>
+<li>同类模式会在不同位置重复出现</li>
+<li>低级特征可以逐渐组合成高级语义</li>
+</ul>
+<p>这些假设刚好很适合图像。</p>
+<p>而后来的 Transformer 之所以在视觉里也越来越强，是因为它擅长：</p>
+<ul>
+<li>建立长距离依赖</li>
+<li>动态分配权重</li>
+<li>整合全局上下文信息</li>
+</ul>
+<p>所以你会发现，不同网络结构虽然长得很不一样，但本质上都在做同一件事：</p>
+<blockquote>
+<p><strong>让输入数据逐步变成更适合任务求解的表示。</strong></p>
+</blockquote>
+<h2 id="七、什么是“归纳偏置”？"><a href="#七、什么是“归纳偏置”？" class="headerlink" title="七、什么是“归纳偏置”？"></a>七、什么是“归纳偏置”？</h2><p>📌如果你再往深一点想，就会接触到一个非常重要的概念：<strong>归纳偏置（Inductive Bias）</strong>。在机器学习中，很多学习算法经常会对学习的问题做一些假设，这些假设就称为归纳偏置。就比如在最近邻分类器中，我们会假设在特征空间中，一个小的局部区域中的大部分样本同属于一类。在朴素贝叶斯分类器中，我们会假设每个特征的条件概率是相互独立的。</p>
+<p>它听起来有点抽象，但其实可以理解成：</p>
+<blockquote>
+<p><strong>模型对世界结构的先验假设。</strong></p>
+</blockquote>
+<p>例如 CNN 的归纳偏置包括：</p>
+<ul>
+<li>局部性</li>
+<li>参数共享</li>
+<li>平移等变性</li>
+</ul>
+<p>这些假设让 CNN 天然适合处理图像。</p>
+<p>而 Transformer 的归纳偏置相对更弱，这意味着它更灵活，但通常也更依赖数据规模和训练策略。</p>
+<p>所以网络结构设计不是随便堆层数，而是在设计：</p>
+<ul>
+<li>模型愿意优先相信什么</li>
+<li>模型更擅长建模什么关系</li>
+<li>模型会用什么方式理解输入</li>
+</ul>
+<p>换句话说：</p>
+<blockquote>
+<p>👉<strong>结构设计，本质上是在设计模型看待世界的方式。</strong></p>
+</blockquote>
+<p>这也是为什么同样的数据、同样的训练预算，换一个结构效果可能差很多。<br>不是因为“层多了”这么简单，而是因为信息处理方式变了。</p>
+<h2 id="八、从信息流角度看，网络到底在做什么？"><a href="#八、从信息流角度看，网络到底在做什么？" class="headerlink" title="八、从信息流角度看，网络到底在做什么？"></a>八、从信息流角度看，网络到底在做什么？</h2><p>如果用一种更适合做研究的视角来看，我更愿意把深度学习理解为一个 <strong>信息处理系统</strong>。</p>
+<p>原始输入里的信息往往很多，但并不全都有用。<br>有些是冗余的，有些是噪声，有些和当前任务无关。</p>
+<p>所以网络本质上一直在做几件事：</p>
+<ul>
+<li>提取信息</li>
+<li>传递信息</li>
+<li>融合信息</li>
+<li>筛选信息</li>
+</ul>
+<p>比如一张图像输入进来后，网络会：</p>
+<ul>
+<li>去掉无关噪声</li>
+<li>保留与任务相关的模式</li>
+<li>把局部特征组合成更稳定的结构</li>
+<li>把低层信号逐渐变成高层语义</li>
+<li>最终形成输出结果</li>
+</ul>
+<p>从这个角度看，很多你后来学到的结构，其实都能统一起来理解：</p>
+<ul>
+<li><strong>卷积</strong>：擅长提取局部模式</li>
+<li><strong>池化</strong>：做压缩和不变性增强</li>
+<li><strong>残差连接</strong>：改善信息流和梯度流</li>
+<li><strong>Attention</strong>：动态决定信息该如何加权</li>
+<li><strong>归一化</strong>：让训练更稳定</li>
+</ul>
+<p>所以有时候，与其把深度学习理解成“很多层神经元”，不如理解成：</p>
+<blockquote>
+<p>👉<strong>一个不断筛选、压缩、重组信息的系统。</strong></p>
+</blockquote>
+<p>这个视角对于后面看 CNN、ResNet、Transformer、检测框架，会非常有帮助。</p>
+<h2 id="九、深度学习到底“学”到了什么？"><a href="#九、深度学习到底“学”到了什么？" class="headerlink" title="九、深度学习到底“学”到了什么？"></a>九、深度学习到底“学”到了什么？</h2><p>这个问题很值得单独拿出来讲。</p>
+<p>如果问：模型训练完以后，到底学到了什么？</p>
+<p>我觉得至少可以从三层来回答。</p>
+<h3 id="第一层：学到了输入到输出的映射"><a href="#第一层：学到了输入到输出的映射" class="headerlink" title="第一层：学到了输入到输出的映射"></a>第一层：学到了输入到输出的映射</h3><p>这是最直接的答案。<br>也就是给定输入，模型知道该如何输出结果。</p>
+<h3 id="第二层：学到了适合任务的特征表示"><a href="#第二层：学到了适合任务的特征表示" class="headerlink" title="第二层：学到了适合任务的特征表示"></a>第二层：学到了适合任务的特征表示</h3><p>这其实更关键。<br>模型不是简单记住样本，而是在中间层中构造出一套有判别力的表示。</p>
+<h3 id="第三层：学到了数据分布中的统计规律"><a href="#第三层：学到了数据分布中的统计规律" class="headerlink" title="第三层：学到了数据分布中的统计规律"></a>第三层：学到了数据分布中的统计规律</h3><p>比如：</p>
+<ul>
+<li>哪些纹理常对应某类目标</li>
+<li>哪些空间关系有意义</li>
+<li>哪些模式容易一起出现</li>
+<li>哪些特征在变化后仍保持稳定</li>
+</ul>
+<p>所以深度学习里的“学习”，并不是像人类那样有意识地理解概念，但它确实在参数中编码了大量有用规律。</p>
+<p>这也能解释为什么深度学习强大，同时又常常脆弱。<br>因为它学到的是对训练目标有效的统计规律，而不一定是真正的因果规律。</p>
+<h2 id="十、为什么说深度学习既强大又脆弱？"><a href="#十、为什么说深度学习既强大又脆弱？" class="headerlink" title="十、为什么说深度学习既强大又脆弱？"></a>十、为什么说深度学习既强大又脆弱？</h2><p>深度学习很强，这一点不用多说。<br>但它为什么又经常显得脆弱？比如对分布变化敏感、对噪声敏感、对对抗扰动敏感？</p>
+<p>原因恰恰也来自它的强大。</p>
+<p>因为它有很强的表达能力，所以它既能学到真正有用的规律，也可能学到一些表面上有效、但不够稳健的伪相关模式。</p>
+<p>📌所以深度学习的本质，并不是“真正理解世界”，而更准确地说是：</p>
+<blockquote>
+<p><strong>在给定数据分布和训练目标下，学到一个非常强的近似函数。</strong></p>
+</blockquote>
+<p>这个函数在训练分布内可能表现很好，但一旦场景变化、数据分布变化，它也可能出问题。</p>
+<p>所以理解深度学习时，一定要避免把它神化。<br>它非常强，但它的强大是建立在数据、目标和训练条件都合理的前提下的。</p>
+<h2 id="十一、把这些放回CV里看，会更清楚"><a href="#十一、把这些放回CV里看，会更清楚" class="headerlink" title="十一、把这些放回CV里看，会更清楚"></a>十一、把这些放回CV里看，会更清楚</h2><p>如果把前面的理解放回计算机视觉里，你会发现很多问题都变清楚了。</p>
+<p>例如目标检测，本质上是一个从图像到“类别+位置”的复杂映射。</p>
+<p>为什么难？</p>
+<p>因为它不仅要认出“是什么”，还要判断“在哪里”，同时还要应对：</p>
+<ul>
+<li>背景复杂</li>
+<li>尺度变化</li>
+<li>遮挡</li>
+<li>小目标</li>
+<li>模糊</li>
+<li>类间相似、类内差异</li>
+</ul>
+<p>所以一个检测网络要做的事情，其实非常多：</p>
+<ol>
+<li>从像素里提取有效特征</li>
+<li>保留空间位置信息</li>
+<li>区分前景和背景</li>
+<li>融合不同尺度的信息</li>
+<li>同时完成分类与定位</li>
+<li>通过损失函数逐步逼近真值</li>
+</ol>
+<p>你看到的任何检测模型，无论叫 YOLO、Faster R-CNN、DETR 还是其他名字，本质上都在围绕这些问题做改进。</p>
+<p>所以以后看视觉模型时，与其先记模块名，不如先问：</p>
+<ul>
+<li>它在解决哪一环的问题？</li>
+<li>它改变了什么信息流？</li>
+<li>它为什么可能有效？</li>
+<li>它的代价是什么？</li>
+</ul>
+<p>这比单纯记名字有用得多。</p>
+<h2 id="十二、最容易误解深度学习的几个地方"><a href="#十二、最容易误解深度学习的几个地方" class="headerlink" title="十二、最容易误解深度学习的几个地方"></a>十二、最容易误解深度学习的几个地方</h2><p>写到这里，我觉得可以顺手把几个常见误区也说一下。</p>
+<h3 id="1-误以为深度学习就是堆层数"><a href="#1-误以为深度学习就是堆层数" class="headerlink" title="1. 误以为深度学习就是堆层数"></a>1. 误以为深度学习就是堆层数</h3><p>不是。<br>“深度”不是目的，层数多也不自动代表模型强。关键在于表示学习能力和优化能力。</p>
+<h3 id="2-误以为深度学习就是自动找规律"><a href="#2-误以为深度学习就是自动找规律" class="headerlink" title="2. 误以为深度学习就是自动找规律"></a>2. 误以为深度学习就是自动找规律</h3><p>也不完全对。<br>它找的是对训练目标有用的统计模式，不一定是本质规律，更不一定是因果规律。</p>
+<h3 id="3-误以为深度学习学到了“理解”"><a href="#3-误以为深度学习学到了“理解”" class="headerlink" title="3. 误以为深度学习学到了“理解”"></a>3. 误以为深度学习学到了“理解”</h3><p>这个要谨慎。<br>它更像是强大的模式拟合和表示构建系统，而不是人类式理解。</p>
+<h3 id="4-误以为效果不好一定是模型不够大"><a href="#4-误以为效果不好一定是模型不够大" class="headerlink" title="4. 误以为效果不好一定是模型不够大"></a>4. 误以为效果不好一定是模型不够大</h3><p>很多时候问题并不在模型大小，而在：</p>
+<ul>
+<li>数据质量</li>
+<li>标注质量</li>
+<li>任务定义</li>
+<li>损失设计</li>
+<li>训练流程</li>
+<li>推理设置</li>
+</ul>
+<p>所以真正做研究的人，不能一看到结果不好就只想着换更大的模型。</p>
+<h2 id="十三、我现在更愿意怎样理解深度学习？"><a href="#十三、我现在更愿意怎样理解深度学习？" class="headerlink" title="十三、我现在更愿意怎样理解深度学习？"></a>十三、我现在更愿意怎样理解深度学习？</h2><p>如果让我把前面所有内容压缩成一句更完整的话，我会这样表达：</p>
+<blockquote>
+<p><strong>深度学习的本质，是利用多层参数化非线性函数，在数据驱动和优化算法的作用下，自动学习适合任务的层次化特征表示，从而逼近复杂的输入—输出映射。</strong></p>
+</blockquote>
+<p>这句话里其实包含了五个关键词：</p>
+<ul>
+<li>多层</li>
+<li>非线性</li>
+<li>数据驱动</li>
+<li>表示学习</li>
+<li>函数逼近</li>
+</ul>
+<p>如果再通俗一点说，就是：</p>
+<blockquote>
+<p>深度学习让计算机不再依赖人手工写规则，而是从大量数据中自己学出一套从输入到输出的复杂规则；它厉害的地方不仅在于“会做判断”，更在于“会学该看什么信息”。</p>
+</blockquote>
+<h2 id="十四、对CV学生来说，真正重要的是什么？"><a href="#十四、对CV学生来说，真正重要的是什么？" class="headerlink" title="十四、对CV学生来说，真正重要的是什么？"></a>十四、对CV学生来说，真正重要的是什么？</h2><p>对计算机视觉方向的学生来说，理解深度学习的本质，不是为了背一个漂亮定义，而是为了建立一种更扎实的思维方式。</p>
+<p>你以后看一个模型，应该慢慢习惯问自己这几个问题：</p>
+<ol>
+<li><strong>它的输入输出映射是什么？</strong><br>也就是这个任务到底在学什么。</li>
+<li><strong>它中间学了什么表示？</strong><br>也就是特征是如何逐层形成的。</li>
+<li><strong>它的信息是怎么流动的？</strong><br>也就是结构设计在改变什么。</li>
+<li><strong>它是怎么被优化出来的？</strong><br>也就是损失函数、反向传播、训练策略在发挥什么作用。</li>
+<li><strong>它隐含了什么先验假设？</strong><br>也就是它的归纳偏置是什么。</li>
+</ol>
+<p>当你开始习惯这样看模型时，深度学习就不再只是“会跑代码”，而会变成一个你真的开始理解的系统。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>深度学习不是魔法，也不只是热门模块的堆砌。<br>它的本质，是通过数据和优化，让一个多层非线性函数逐渐学会如何表示信息、筛选信息，并完成输入到输出的复杂映射。</p>
+<p>如果说一句我自己现在越来越认同的话，那就是：</p>
+<blockquote>
+<p>📌<strong>不要只记住模型名和模块名，要去理解它到底在处理什么信息、为什么这样设计、它真正解决了什么问题。</strong></p>
+</blockquote>
+<p>当你开始这样看待深度学习时，后面再学 CNN、ResNet、Attention、Transformer，甚至再往后看各种检测、分割、生成模型，都会顺很多。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87/" class="category-chain-item">论文</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" class="print-no-link">#机器学习</a>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>【从会用模型到理解CV1】深度学习的本质到底是什么？不是“黑盒”，而是从数据中学习函数</div>
+      <div>http://example.com/2026/03/14/从会用模型到理解CV1/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Alaskaboo</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月14日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2026年3月15日</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2026/03/15/%E4%BB%8E%E4%BC%9A%E7%94%A8%E6%A8%A1%E5%9E%8B%E5%88%B0%E7%90%86%E8%A7%A3CV2/" title="【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">【从会用模型到理解CV2】一张图进入CV模型后，信息是如何流动的？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/12/reading_paper/" title="对文献阅读的重新认识">
+                        <span class="hidden-mobile">对文献阅读的重新认识</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  
+  
+    <article id="comments" lazyload>
+      
+  <div id="gitalk-container"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#gitalk-container', function() {
+      Fluid.utils.createCssLink('/css/gitalk.css')
+      Fluid.utils.createScript('https://lib.baomitu.com/gitalk/1.8.0/gitalk.min.js', function() {
+        var options = Object.assign(
+          {"clientID":"Ov23liWXOySWQAe0OVjq","clientSecret":"5fb2935947fe65c42f0f5f3f2236c02901650f02","repo":"gittalk-comments","owner":"Alaskaboo","admin":["Alaskaboo"],"language":"zh-CN","labels":["Gitalk"],"perPage":10,"pagerDirection":"last","distractionFreeMode":false,"createIssueManually":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token"},
+          {
+            id: '19dfd18a23888679a1a688c5ff2cb608'
+          }
+        )
+        var gitalk = new Gitalk(options);
+        gitalk.render('gitalk-container');
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+    </article>
+  
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://www.cnblogs.com/Alaskaboo" target="_blank" rel="nofollow noopener"><span>Alaskaboo</span></a> <i class="iconfont icon-love"></i> <a href="" target="_blank" rel="nofollow noopener"><span>以玖</span></a>
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="leancloud-site-pv-container" style="display: none">
+        总访问量 
+        <span id="leancloud-site-pv"></span>
+         次
+      </span>
+    
+    
+      <span id="leancloud-site-uv-container" style="display: none">
+        总访客数 
+        <span id="leancloud-site-uv"></span>
+         人
+      </span>
+    
+    
+
+  
+
+</div>
+
+  
+  
+    <!-- 备案信息 ICP for China -->
+    <div class="beian">
+  <span>
+    <a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow noopener">
+      渝ICP备2025063032号-2
+    </a>
+  </span>
+  
+    
+      <span>
+        <a
+          href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=50023102500775"
+          rel="nofollow noopener"
+          class="beian-police"
+          target="_blank"
+        >
+          
+            <span style="visibility: hidden; width: 0">|</span>
+            <img src="/img/police_beian.png" srcset="/img/loading.gif" lazyload alt="police-icon"/>
+          
+          <span>渝公网安备50023102500775号</span>
+        </a>
+      </span>
+    
+  
+</div>
+
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script defer src="/js/leancloud.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
