@@ -21,14 +21,14 @@
   
     <meta name="description" content="一 相关概念1 什么是机器学习机器学习定义：让计算机在没有明确编程的情况下学习的研究领域。（从数据中寻找规律、建立关系，根据建立的关系去解决问题的方法，即从数据中学习并实现自我优化与升级）。 机器学习又分为分类任务、和回归任务。主要的区别在于分类可以理解为离散的点，而回归任务是连续的线。 机器学习、深度学习、人工智能的关系  机器学习是实现人工智能的方法，深度学习是一种实现机器学习的技术  2 科">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Machine Learning">
+<meta property="og:title" content="机器学习">
 <meta property="og:url" content="http://example.com/2025/03/02/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="Alaskaboo&#39;s Blog">
 <meta property="og:description" content="一 相关概念1 什么是机器学习机器学习定义：让计算机在没有明确编程的情况下学习的研究领域。（从数据中寻找规律、建立关系，根据建立的关系去解决问题的方法，即从数据中学习并实现自我优化与升级）。 机器学习又分为分类任务、和回归任务。主要的区别在于分类可以理解为离散的点，而回归任务是连续的线。 机器学习、深度学习、人工智能的关系  机器学习是实现人工智能的方法，深度学习是一种实现机器学习的技术  2 科">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://alaskaboo-picgo.oss-cn-shanghai.aliyuncs.com/20250625214357844.png">
 <meta property="article:published_time" content="2025-03-02T02:30:22.000Z">
-<meta property="article:modified_time" content="2026-01-02T02:34:30.821Z">
+<meta property="article:modified_time" content="2026-11-25T13:55:43.589Z">
 <meta property="article:author" content="Alaskaboo">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="计算机视觉">
@@ -37,7 +37,7 @@
   
   
   
-  <title>Machine Learning - Alaskaboo&#39;s Blog</title>
+  <title>机器学习 - Alaskaboo&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -228,7 +228,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Machine Learning"></span>
+            <span id="subtitle" data-typed-text="机器学习"></span>
           
         </div>
 
@@ -308,7 +308,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Machine Learning</h1>
+            <h1 id="seo-header">机器学习</h1>
             
             
               <div class="markdown-body">
@@ -640,7 +640,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 模型性能准确率评估</span><br><span class="hljs-keyword">from</span> sklearn.metrics <span class="hljs-keyword">import</span> accuracy_score<br>accuracy = accuracy_score(y, y_predict)<br><span class="hljs-built_in">print</span>(accuracy)<br></code></pre></td></tr></table></figure>
 </li>
 <li><p>拿到公式</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 拿到公式</span><br>Theta0 = LR.intercept_<br>Theta1,Theta2 = LR.coef_[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>], LR.coef_[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>]<br><span class="hljs-built_in">print</span>(Theta0, Theta1, Theta2)<br>                                                                                                                                                                                                                                                   <br>X2_new = -(Theta0 + Theta1 * X1) / Theta2<br>X2_new.head()<br></code></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-comment"># 拿到公式</span><br>Theta0 = LR.intercept_<br>Theta1,Theta2 = LR.coef_[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>], LR.coef_[<span class="hljs-number">0</span>][<span class="hljs-number">1</span>]<br><span class="hljs-built_in">print</span>(Theta0, Theta1, Theta2)<br>                                                                                                                                                                                                                                                         <br>X2_new = -(Theta0 + Theta1 * X1) / Theta2<br>X2_new.head()<br></code></pre></td></tr></table></figure>
 
 
 </li>
@@ -852,28 +852,28 @@ GPU 内存	0.0/13.9 GB
 </li>
 <li><p>删除虚拟环境：</p>
 <blockquote>
-<p>conda remove -n 虚拟环境名字 –all</p>
+<p>conda remove -n 虚拟环境名字 - -all</p>
 </blockquote>
 </li>
 <li><p>如何查看配置文件中有哪些通道？</p>
 <blockquote>
-<p>conda config –get</p>
-<p>conda config –show</p>
+<p>conda config - -get</p>
+<p>conda config - -show</p>
 </blockquote>
 </li>
 <li><p>持久添加通道：</p>
 <blockquote>
-<p>conda config –add channels <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</a><br>conda config –add channels <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</a><br>conda config –add channels <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge</a><br>conda config –set show_channel_urls yes</p>
+<p>conda config - -add channels <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</a><br>conda config - -add channels <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free">https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free</a><br>conda config - -add channels <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge">https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge</a><br>conda config - -set show_channel_urls yes</p>
 </blockquote>
 </li>
 <li><p>删除通道：</p>
 <blockquote>
-<p>conda config –remove channels 通道地址</p>
+<p>conda config - -remove channels 通道地址</p>
 </blockquote>
 </li>
 <li><p>清理缓存：</p>
 <blockquote>
-<p><strong>conda clean –all</strong></p>
+<p><strong>conda clean - -all</strong></p>
 </blockquote>
 </li>
 <li><p>所有镜像</p>
@@ -1872,7 +1872,7 @@ GPU 内存	0.0/13.9 GB
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Machine Learning</div>
+      <div>机器学习</div>
       <div>http://example.com/2025/03/02/机器学习/</div>
     </div>
     <div class="license-meta">
@@ -1891,7 +1891,7 @@ GPU 内存	0.0/13.9 GB
       
         <div class="license-meta-item license-meta-date">
           <div>更新于</div>
-          <div>2026年1月2日</div>
+          <div>2026年11月25日</div>
         </div>
       
       
